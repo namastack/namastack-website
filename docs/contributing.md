@@ -15,56 +15,19 @@ Our goal is to ensure that our documentation, as well as issue tracker and discu
 
 ### Creating an Issue
 
-<div class="grid cards" markdown>
+**Choose the right path for your contribution:**
 
--   :material-bug-outline: &nbsp;
-    __Something is not working?__
-
-    ---
-
-    Report a bug in Namastack Outbox by creating an issue with a
-    reproduction
-
-    ---
-
-    [:octicons-arrow-right-24: Report a bug][report a bug]
-
--   :material-file-document-remove-outline: &nbsp;
-    __Missing information in our docs?__
-
-    ---
-
-    Report missing information or potential inconsistencies in our
-    documentation
-
-    ---
-
-    [:octicons-arrow-right-24: Report a docs issue][report a docs issue]
-
--   :material-lightbulb-on-20: &nbsp;
-    __Want to submit an idea?__
-
-    ---
-
-    Propose a change, feature request, or suggest an improvement
-
-    ---
-
-    [:octicons-arrow-right-24: Request a change][request a change]
-
--   :material-account-question-outline: &nbsp;
-    __Have a question or need help?__
-
-    ---
-
-    Ask a question on our [discussion board] and get in touch with our
-    community
-
-    ---
-
-    [:octicons-arrow-right-24: Ask a question][discussion board]
-
-</div>
+- **Something is not working?**
+  - Report a bug in Namastack Outbox by creating an issue with a reproduction.
+  - [Report a bug][report a bug]
+- **Missing information in our docs?**
+  - Report missing information or potential inconsistencies in our documentation.
+  - [Report a docs issue][report a docs issue]
+- **Want to submit an idea?**
+  - Propose a change, feature request, or suggest an improvement.
+  - [Request a change][request a change]
+- **Have a question or need help?**
+  - Ask a question on our [discussion board] and get in touch with our community.
 
 [report a bug]: https://github.com/namastack/namastack-outbox/issues/new?template=bug_report.md
 [report a docs issue]: https://github.com/namastack/namastack-outbox/issues/new?template=docs_issue.md
@@ -72,31 +35,12 @@ Our goal is to ensure that our documentation, as well as issue tracker and discu
 
 ### Contributing Code
 
-<div class="grid cards" markdown>
-
--   :material-source-pull: &nbsp;
-    __Want to create a pull request?__
-
-    ---
-
-    Learn how to create a comprehensive and useful pull request (PR)
-
-    ---
-
-    [:octicons-arrow-right-24: Pull request process](#pull-request-process)
-
--   :material-test-tube: &nbsp;
-    __Want to add tests?__
-
-    ---
-
-    Improve test coverage and help ensure code quality
-
-    ---
-
-    [:octicons-arrow-right-24: Testing guidelines](#testing-guidelines)
-
-</div>
+- **Want to create a pull request?**
+  - Learn how to create a comprehensive and useful pull request (PR)
+  - [Pull request process](#pull-request-process)
+- **Want to add tests?**
+  - Improve test coverage and help ensure code quality
+  - [Testing guidelines](#testing-guidelines)
 
 ## Getting Started
 
@@ -186,8 +130,9 @@ namastack-outbox/
    git commit -m "GH-123 Add feature: description of your changes"
    ```
 
-    !!! tip "Commit Message Format"
-        Always prefix your commit message with the GitHub issue number (e.g., `GH-123`).
+:::tip Commit Message Format
+Always prefix your commit message with the GitHub issue number (e.g., `GH-123`).
+:::
 
 6. **Push to your fork**:
    ```bash
@@ -283,44 +228,26 @@ fun `does not process record before next retry time`() { ... }
 
 Before interacting within the project, please take a moment to consider the following questions. By doing so, you can ensure that you are using the correct issue template and that you provide all necessary information when interacting with our community.
 
-!!! warning "Issues, discussions, and comments are forever"
-    Please note that everything you write is permanent and will remain
-    for everyone to read – forever. Therefore, please always be nice and
-    constructive, follow our contribution guidelines, and comply with our
-    Code of Conduct.
+:::warning Issues, discussions, and comments are forever
+Please note that everything you write is permanent and will remain for everyone to read – forever. Therefore, please always be nice and constructive, follow our contribution guidelines, and comply with our Code of Conduct.
+:::
 
 ### Before Creating an Issue
 
-- Are you using the appropriate issue template, or is there another issue
-  template that better fits the context of your request?
-
-- Have you checked if a similar bug report or change request has already been
-  created, or have you stumbled upon something that might be related?
-
-- Did you fill out every field as requested and did you provide all additional
-  information we maintainers need to comprehend your request?
+- Are you using the appropriate issue template, or is there another issue template that better fits the context of your request?
+- Have you checked if a similar bug report or change request has already been created, or have you stumbled upon something that might be related?
+- Did you fill out every field as requested and did you provide all additional information we maintainers need to comprehend your request?
 
 ### Before Asking a Question
 
-- Is the topic a question for our [discussion board], or is it a bug report or
-  change request that should better be raised on our [issue tracker]?
-
-- Is there an open discussion on the topic of your request? If the answer is yes,
-  does your question match the direction of the discussion, or should you open a
-  new discussion?
-
-- Did you provide our community with all the necessary information to
-  understand your question and help you quickly, or can you make it easier to
-  help you?
+- Is the topic a question for our [discussion board], or is it a bug report or change request that should better be raised on our [issue tracker]?
+- Is there an open discussion on the topic of your request? If the answer is yes, does your question match the direction of the discussion, or should you open a new discussion?
+- Did you provide our community with all the necessary information to understand your question and help you quickly, or can you make it easier to help you?
 
 ### Before Commenting
 
-- Is your comment relevant to the topic of the current page, post, issue, or
-  discussion, or is it a better idea to create a new issue or discussion?
-
-- Does your comment add value to the conversation? Is it constructive and
-  respectful to our community and us maintainers? Could you just use a
-  :octicons-smiley-16: reaction instead?
+- Is your comment relevant to the topic of the current page, post, issue, or discussion, or is it a better idea to create a new issue or discussion?
+- Does your comment add value to the conversation? Is it constructive and respectful to our community and us maintainers? Could you just use a reaction instead?
 
 ## Code of Conduct
 
@@ -336,5 +263,4 @@ Our commitment is to foster a positive and supportive environment, free of inapp
 
 ---
 
-Thank you for contributing to Namastack Outbox! Your contributions help make this library better for everyone. :tada:
-
+Thank you for contributing to Namastack Outbox! Your contributions help make this library better for everyone.

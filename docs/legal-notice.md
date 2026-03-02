@@ -14,7 +14,7 @@ handling and outbox pattern implementations in modern applications.
 The project is part of a broader open-source initiative and welcomes contributions, feedback, and
 voluntary donations to support its development and sustainability.
 
-_Last updated: January 2026_
+_Last updated: March 2026_
 
 ---
 
@@ -35,12 +35,10 @@ It is non-commercial in nature and accepts voluntary donations to support its de
 
 Our website is hosted on:
 
-**GitHub Pages**  
-GitHub Inc.  
-88 Colin P Kelly Jr St, San Francisco, CA 94107, USA
+**Vercel Inc.**  
+440 N Barranca Ave #4133, Covina, CA 91723, USA
 
-Data may be transmitted to servers in the United States. GitHub is part of Microsoft Corporation,
-which participates in the EU–U.S. Data Privacy Framework.
+Data may be transmitted to servers in the United States. Vercel participates in the EU–U.S. Data Privacy Framework.
 
 ---
 
@@ -48,13 +46,9 @@ which participates in the EU–U.S. Data Privacy Framework.
 
 Im Folgenden informieren wir Sie über die Verarbeitung personenbezogener Daten auf dieser Website.
 
-## Hosting durch GitHub Pages
+## Hosting durch Vercel
 
-Unsere Website wird bei GitHub Pages (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107,
-USA)
-gehostet. Dabei kann es zu einer Übertragung personenbezogener Daten in die USA kommen.
-Microsoft, die Muttergesellschaft von GitHub, ist nach dem EU-US Data Privacy Framework
-zertifiziert.
+Unsere Website wird bei Vercel (Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA) gehostet. Dabei kann es zu einer Übertragung personenbezogener Daten in die USA kommen. Vercel ist nach dem EU-US Data Privacy Framework zertifiziert.
 
 ---
 
@@ -92,12 +86,9 @@ https://tools.google.com/dlpage/gaoptout/
 
 Below we explain how personal data is processed on this website.
 
-## Hosting via GitHub Pages
+## Hosting via Vercel
 
-Our website is hosted on GitHub Pages (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107,
-USA).
-Data may be transferred to servers in the United States. GitHub is owned by Microsoft Corporation,
-which is certified under the EU–U.S. Data Privacy Framework.
+Our website is hosted on Vercel (Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA). Data may be transferred to servers in the United States. Vercel is certified under the EU–U.S. Data Privacy Framework.
 
 ---
 
