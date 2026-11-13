@@ -5,6 +5,7 @@ const GA_ID = 'G-7T0WYS15SK';
 
 declare global {
   interface Window {
+    [key: `ga-disable-${string}`]: boolean | undefined;
     dataLayer: unknown[][];
     gtag: (...args: unknown[]) => void;
   }
