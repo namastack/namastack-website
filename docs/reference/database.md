@@ -221,17 +221,15 @@ namastack:
   outbox:
     completion-batching:
       enabled: true
-      writer-count: 1
       max-batch-size: 1024
       max-wait: 1ms
 ```
 
+Each outbox runtime has one completion writer that collects and writes batches sequentially.
+Processing tasks continue to submit completions concurrently while a batch is being written.
 `max-batch-size` limits the number of completions in a batch. `max-wait` limits how
-long a writer waits to fill a batch after receiving its first completion.
-`writer-count` controls how many batches can be written concurrently. A full batch
+long the writer waits to fill a batch after receiving its first completion. A full batch
 is written immediately, without waiting for `max-wait` to expire.
-Only one writer collects a batch at a time. Once collection finishes, another writer
-can collect the next batch while the previous batch is being written to the database.
 
 Batching is most useful when records from many different keys complete concurrently
 and completion writes are a database bottleneck. At low traffic, a completion may

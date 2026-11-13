@@ -53,7 +53,6 @@ namastack:
 
     completion-batching:
       enabled: false                           # Batch completion writes (JDBC only; default: false)
-      writer-count: 1                          # Concurrent completion writers (default: 1)
       max-batch-size: 1024                     # Maximum completions per batch (default: 1024)
       max-wait: 1ms                            # Maximum wait after the first completion (default: 1ms)
 
