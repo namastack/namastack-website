@@ -102,8 +102,7 @@ namastack-outbox/
 ├── namastack-outbox-observability/     # Micrometer metrics and tracing support
 ├── namastack-outbox-starter-jdbc/      # JDBC starter (convenience dependency)
 ├── namastack-outbox-integration-tests/ # Integration tests
-├── namastack-outbox-examples/          # Example applications
-└── namastack-outbox-docs/              # Documentation site
+└── namastack-outbox-examples/          # Example applications
 ```
 
 ## Pull Request Process
@@ -263,3 +262,7 @@ Our commitment is to foster a positive and supportive environment, free of inapp
 ---
 
 Thank you for contributing to Namastack Outbox! Your contributions help make this library better for everyone.
+
+## Website documentation
+
+The website and versioned documentation are maintained separately in [namastack-website](https://github.com/namastack/namastack-website). Documentation changes and deployments are independent of library releases.

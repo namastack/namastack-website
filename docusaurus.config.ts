@@ -44,7 +44,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'namastack', // Usually your GitHub org/user name.
-  projectName: 'namstack-outbox', // Usually your repo name.
+  projectName: 'namastack-website', // Usually your repo name.
 
   onBrokenLinks: 'warn',
 
@@ -71,7 +71,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           lastVersion: latestVersion,
           versions: versionConfig,
-          editUrl: 'https://github.com/namastack/namastack-outbox/edit/main/namastack-outbox-docs/',
+          editUrl: 'https://github.com/namastack/namastack-website/edit/main/',
         },
         sitemap: {
           changefreq: 'weekly' as const,

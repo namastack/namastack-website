@@ -20,3 +20,8 @@ pnpm-workspace.yaml
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local deployment and credentials
+.vercel/
+.env
+.env.*
