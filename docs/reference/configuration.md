@@ -51,6 +51,11 @@ namastack:
       heartbeat-interval: 5s                   # How often each instance sends a heartbeat (default: 5s)
       rebalance-interval: 10s                  # How often partitions are recalculated (default: 10s)
 
+    completion-batching:
+      enabled: false                           # Batch completion writes (JDBC only; default: false)
+      max-batch-size: 1024                     # Maximum completions per batch (default: 1024)
+      max-wait: 1ms                            # Maximum wait after the first completion (default: 1ms)
+
     jdbc:
       schema-name: null                        # Database schema name (default: null, uses default schema)
       table-prefix: ""                         # Prefix for table names (default: empty)
