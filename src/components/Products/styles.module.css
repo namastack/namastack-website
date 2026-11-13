@@ -105,17 +105,11 @@
   position: relative;
   align-items: center;
 }
-.dualArt::before {
-  content: '';
-  position: absolute;
-  top: 45%;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--ns-border-active), transparent);
-  z-index: 0;
-}
+
 .dualArt > div {
   position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
   text-align: center;
   padding: 1rem 0.2rem 1.5rem;
   background: radial-gradient(
@@ -140,9 +134,7 @@
   filter: drop-shadow(0 16px 24px rgb(0 0 0 / 20%));
   color: var(--ns-accent);
 }
-.dualArt > div:nth-child(2) {
-  transform: translateY(2rem);
-}
+
 .facts {
   display: flex;
   justify-content: space-between;
@@ -368,7 +360,7 @@
   max-width: 510px;
   margin-inline: auto;
 }
-.previewNote {
+.releaseNote {
   margin: 1.5rem 0 0;
   color: var(--ns-text-muted);
   font-size: 0.71rem;
@@ -518,9 +510,7 @@
   .dualArt .largeGlyph {
     max-height: 160px;
   }
-  .dualArt > div:nth-child(2) {
-    transform: translateY(0.8rem);
-  }
+
   .facts {
     font-size: 0.58rem;
     display: grid;

@@ -2,7 +2,7 @@ import React, {useState, type ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Heading from '@theme/Heading';
-import versions from '@site/versions.json';
+import versions from '@site/outbox_versions.json';
 import {
   IconAppsFilled,
   IconArrowsExchange,
@@ -131,11 +131,11 @@ export function Hero({product = false}: HeroProps) {
               : 'Namastack provides open-source infrastructure for building dependable event-driven applications. Namastack Outbox is the first available project.'}
           </p>
           <div className={styles.actions}>
-            <Link className={styles.primaryButton} to={product ? '/docs/outbox/quickstart/' : '/outbox/'}>
+            <Link className={styles.primaryButton} to={product ? '/outbox/quickstart/' : '/outbox/'}>
               {product ? 'Get started' : 'Explore Namastack Outbox'}
               <span aria-hidden="true">→</span>
             </Link>
-            <Link className={styles.secondaryButton} to="/docs/outbox/">
+            <Link className={styles.secondaryButton} to="/outbox/">
               Documentation
             </Link>
             <Link className={styles.ghostButton} href={GITHUB_URL}>
@@ -375,7 +375,7 @@ export function IntegrationSection() {
               official starter to externalize events through Namastack&apos;s persistence, processing,
               retry, ordering, and observability model.
             </p>
-            <Link className={styles.secondaryButton} to="/docs/outbox/reference/spring-modulith/">
+            <Link className={styles.secondaryButton} to="/outbox/reference/spring-modulith/">
               Read the integration guide
             </Link>
           </div>
@@ -438,7 +438,7 @@ export function CTASection({product = false}: {product?: boolean}) {
             : 'Use Namastack Outbox to close the dual-write gap in your Spring Boot application.'}
         </p>
         <div className={styles.actions}>
-          <Link className={styles.primaryButton} to="/docs/outbox/quickstart/">Read the quickstart <span aria-hidden="true">→</span></Link>
+          <Link className={styles.primaryButton} to="/outbox/quickstart/">Read the quickstart <span aria-hidden="true">→</span></Link>
           <Link className={styles.secondaryButton} href={GITHUB_URL}><IconBrandGithubFilled aria-hidden="true" /> Explore on GitHub</Link>
         </div>
       </div>
@@ -502,7 +502,7 @@ export function ProductDetails() {
             <Heading as="h3">Understand the delivery contract</Heading>
             <p>At-least-once delivery can produce duplicates. The guarantees guide explains ordering, retries, transactions, and consumer responsibilities.</p>
           </div>
-          <Link to="/docs/outbox/reference/guarantees/">Read guarantees →</Link>
+          <Link to="/outbox/reference/guarantees/">Read guarantees →</Link>
         </div>
       </div>
     </section>

@@ -5,6 +5,6 @@ if (!['outbox', 'once'].includes(product) || !/^\d+\.\d+\.x$/.test(version ?? ''
     'Usage: npm run docs:version:outbox -- 2.0.x OR npm run docs:version:once -- 0.2.x',
   );
 }
-const command = product === 'outbox' ? 'docs:version' : 'docs:version:once';
+const command = `docs:version:${product}`;
 execFileSync('npm', ['run', 'docusaurus', '--', command, version], {stdio: 'inherit'});
 execFileSync(process.execPath, ['scripts/sync-redirects.mjs'], {stdio: 'inherit'});

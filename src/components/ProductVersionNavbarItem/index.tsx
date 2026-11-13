@@ -10,10 +10,10 @@ export default function ProductVersionNavbarItem(props: Props) {
     dropdownItemsBefore: props.dropdownItemsBefore ?? [],
     dropdownItemsAfter: props.dropdownItemsAfter ?? [],
   };
-  if (pathname.startsWith('/docs/outbox/')) {
-    return <DocsVersionDropdownNavbarItem {...normalized} docsPluginId="default" />;
+  if (pathname.startsWith('/outbox/')) {
+    return <DocsVersionDropdownNavbarItem {...normalized} docsPluginId="outbox" />;
   }
-  if (pathname.startsWith('/docs/once/')) {
+  if (pathname.startsWith('/once/')) {
     return <DocsVersionDropdownNavbarItem {...normalized} docsPluginId="once" />;
   }
   return null;

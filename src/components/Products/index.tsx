@@ -14,7 +14,7 @@ import {
   IconCode,
 } from '@tabler/icons-react';
 import {SponsorSection} from '@site/src/components/MarketingPage';
-import outboxVersions from '@site/versions.json';
+import outboxVersions from '@site/outbox_versions.json';
 import onceVersions from '@site/once_versions.json';
 import styles from './styles.module.css';
 
@@ -109,7 +109,7 @@ export function ProductCards({documentation = false}: {documentation?: boolean})
               {product === 'outbox' ? 'Transactional outbox' : 'Transactional idempotency'}
             </span>
             <span className={styles.release}>
-              {product === 'outbox' ? outboxVersions[0] : `${onceVersions[0]} Preview`}
+              {product === 'outbox' ? outboxVersions[0] : onceVersions[0]}
             </span>
           </div>
           <div className={styles.cardHeading}>
@@ -148,15 +148,18 @@ export function ProductCards({documentation = false}: {documentation?: boolean})
           <div className={styles.cardActions}>
             <Link
               className={styles.primary}
-              to={documentation ? `/docs/${product}/quickstart/` : `/${product}/`}
+              to={documentation ? `/${product}/quickstart/` : `/${product}/`}
             >
               {documentation
                 ? 'Start the quickstart'
                 : `Explore ${product === 'outbox' ? 'Outbox' : 'Once'}`}
               <IconArrowRight size={16} aria-hidden="true" />
             </Link>
-            <Link className={styles.textLink} to={`/docs/${product}/`}>
-              {documentation ? 'Browse documentation' : 'Documentation'} →
+            <Link
+              className={styles.textLink}
+              to={documentation ? `/${product}/` : `/${product}/quickstart/`}
+            >
+              {documentation ? 'Product overview' : 'Quickstart'} →
             </Link>
           </div>
         </article>
@@ -178,6 +181,7 @@ export function ProductVideo({product}: {product: Product}) {
         </Heading>
       </figcaption>
       <video
+        key={product}
         controls
         playsInline
         preload="none"
@@ -215,17 +219,17 @@ export function ProductHome() {
                 <Link className={styles.primary} to="#projects">
                   Explore the projects <IconArrowRight size={17} aria-hidden="true" />
                 </Link>
-                <Link className={styles.secondary} to="/docs/">
-                  Read the docs
+                <Link className={styles.secondary} to="/once/">
+                  Meet Once
                 </Link>
               </div>
             </div>
             <div className={styles.dualArt} aria-hidden="true">
-              <div>
+              <div data-product-art="outbox">
                 <ProductGlyph product="outbox" large />
                 <span>OUTBOX / DELIVER</span>
               </div>
-              <div>
+              <div data-product-art="once">
                 <ProductGlyph product="once" large />
                 <span>ONCE / PROTECT</span>
               </div>
@@ -259,10 +263,11 @@ export function ProductHome() {
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
             <span className={styles.eyebrow}>From producer to consumer</span>
-            <Heading as="h2">Use either library, or connect both.</Heading>
+            <Heading as="h2">Effectively-once business processing.</Heading>
             <p>
-              Outgoing work commits in the producer’s database. Delivery may repeat. A consumer uses
-              a stable identity to protect its own local transaction.
+              Outbox delivers committed work at least once. Once commits the consumer’s business
+              changes and marker together. With a stable identity and retained marker, repeated
+              delivery leaves one committed local business effect.
             </p>
           </div>
           <ol className={styles.flow}>
@@ -279,7 +284,7 @@ export function ProductHome() {
               </li>
             ))}
           </ol>
-          <Link className={styles.textLink} to="/docs/once/usage/integrations/">
+          <Link className={styles.textLink} to="/once/reference/usage/integrations/#effectively-once-business-processing">
             See how Outbox and Once work together →
           </Link>
         </div>
@@ -397,7 +402,7 @@ export function OnceContent() {
         <div className={styles.container}>
           <div className={styles.onceHeroGrid}>
             <div>
-              <span className={styles.eyebrow}>Namastack Once · {onceVersions[0]} Preview</span>
+              <span className={styles.eyebrow}>Namastack Once · {onceVersions[0]}</span>
               <Heading as="h1">
                 Once<span className={styles.dot}>.</span>
               </Heading>
@@ -407,17 +412,17 @@ export function OnceContent() {
                 with your business data, and skip duplicate invocations.
               </p>
               <div className={styles.actions}>
-                <Link className={styles.primary} to="/docs/once/quickstart/">
+                <Link className={styles.primary} to="/once/quickstart/">
                   Get started <IconArrowRight size={17} aria-hidden="true" />
                 </Link>
                 <Link className={styles.secondary} href={github('once')}>
                   <IconBrandGithub size={18} aria-hidden="true" /> GitHub
                 </Link>
               </div>
-              <p className={styles.previewNote}>
+              <p className={styles.releaseNote}>
                 Java & Kotlin · JDBC & MongoDB · Spring Boot
                 <br />
-                Preview builds: 0.1.0-SNAPSHOT. No stable release yet.
+                Latest release: 0.1.0.
               </p>
             </div>
             <div className={styles.onceArt}>
@@ -441,7 +446,7 @@ export function OnceContent() {
                 Keep business logic in your application. Once reserves the identity, runs the
                 synchronous action and returns after transaction completion.
               </p>
-              <Link className={styles.textLink} to="/docs/once/concepts/transactions/">
+              <Link className={styles.textLink} to="/once/reference/concepts/transactions/">
                 Understand the guarantees →
               </Link>
             </div>
@@ -482,10 +487,10 @@ export function OnceContent() {
             </p>
           </div>
           <div className={styles.actions}>
-            <Link className={styles.primary} to="/docs/once/quickstart/">
+            <Link className={styles.primary} to="/once/quickstart/">
               Read the quickstart <IconArrowRight size={17} aria-hidden="true" />
             </Link>
-            <Link className={styles.secondary} to="/docs/once/examples/">
+            <Link className={styles.secondary} to="/once/reference/examples/">
               Explore the examples
             </Link>
           </div>

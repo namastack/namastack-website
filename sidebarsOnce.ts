@@ -1,30 +1,67 @@
 import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+
 const sidebars: SidebarsConfig = {
-  onceSidebar: [
+  referenceSidebar: [
+    {
+      type: 'html',
+      value: '<span class="docs-product-name">Namastack Once</span>',
+    },
     'overview',
     'quickstart',
     {
       type: 'category',
-      label: 'Core concepts',
-      items: ['concepts/identity', 'concepts/transactions'],
+      label: 'Reference',
+      collapsible: false,
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'reference/index',
+      },
+      items: [
+        {
+          type: 'category',
+          label: 'Core Concepts',
+          collapsed: true,
+          items: [
+            'reference/concepts/identity',
+            'reference/concepts/transactions',
+            'reference/usage/annotations',
+            'reference/usage/programmatic',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Persistence',
+          collapsed: true,
+          items: [
+            'reference/persistence/jdbc',
+            'reference/persistence/mongodb',
+            'reference/operations/retention',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Integrations',
+          collapsed: true,
+          items: ['reference/usage/integrations'],
+        },
+        {
+          type: 'category',
+          label: 'Observability',
+          collapsed: true,
+          items: ['reference/operations/observability'],
+        },
+        {
+          type: 'category',
+          label: 'Advanced',
+          collapsed: true,
+          items: ['reference/persistence/multiple-instances'],
+        },
+        'reference/configuration',
+        'reference/examples',
+      ],
     },
-    {
-      type: 'category',
-      label: 'Using Once',
-      items: ['usage/annotations', 'usage/programmatic', 'usage/integrations'],
-    },
-    {
-      type: 'category',
-      label: 'Persistence',
-      items: ['persistence/jdbc', 'persistence/mongodb', 'persistence/multiple-instances'],
-    },
-    {
-      type: 'category',
-      label: 'Operations',
-      items: ['operations/retention', 'operations/observability'],
-    },
-    'configuration',
-    'examples',
   ],
 };
+
 export default sidebars;

@@ -1,7 +1,7 @@
 import type {ComponentType, ReactNode} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import {useActiveVersion} from '@docusaurus/plugin-content-docs/client';
+import {useDocsVersion} from '@docusaurus/plugin-content-docs/client';
 import {
   IconAppsFilled,
   IconChartBar,
@@ -28,10 +28,11 @@ type ReferenceGroup = {
   items: VersionedReferenceItem[];
 };
 
-const referenceGroups: ReferenceGroup[] = [
+const outboxReferenceGroups: ReferenceGroup[] = [
   {
     title: 'Core Concepts',
-    description: 'Processing model, delivery guarantees, scheduling, handlers, and the processing chain.',
+    description:
+      'Processing model, delivery guarantees, scheduling, handlers, and the processing chain.',
     icon: IconShieldCheckeredFilled,
     items: [
       {title: 'Core Features', link: 'core/'},
@@ -99,15 +100,65 @@ const referenceGroups: ReferenceGroup[] = [
   },
 ];
 
+const onceReferenceGroups: ReferenceGroup[] = [
+  {
+    title: 'Core Concepts',
+    description: 'Identity, transaction guarantees, and annotation and programmatic APIs.',
+    icon: IconShieldCheckeredFilled,
+    items: [
+      {title: 'Scope and Key', link: 'concepts/identity/'},
+      {title: 'Transactions and Guarantees', link: 'concepts/transactions/'},
+      {title: 'Annotation API', link: 'usage/annotations/'},
+      {title: 'Programmatic API', link: 'usage/programmatic/'},
+    ],
+  },
+  {
+    title: 'Persistence',
+    description: 'Supported databases, schema provisioning, marker retention, and cleanup.',
+    icon: IconDatabase,
+    items: [
+      {title: 'JDBC Persistence', link: 'persistence/jdbc/'},
+      {title: 'MongoDB Persistence', link: 'persistence/mongodb/'},
+      {title: 'Retention and Cleanup', link: 'operations/retention/'},
+    ],
+  },
+  {
+    title: 'Integrations',
+    description: 'Combine Once with Outbox and messaging for effectively-once business processing.',
+    icon: IconAppsFilled,
+    items: [{title: 'Outbox and Messaging', link: 'usage/integrations/'}],
+  },
+  {
+    title: 'Observability',
+    description: 'Execution and cleanup observations, metrics, tracing, and instrumentation.',
+    icon: IconChartBar,
+    items: [{title: 'Observability', link: 'operations/observability/'}],
+  },
+  {
+    title: 'Advanced',
+    description: 'Named Once instances and explicit resource and transaction-manager selection.',
+    icon: IconRollercoasterFilled,
+    items: [{title: 'Multiple Once Instances', link: 'persistence/multiple-instances/'}],
+  },
+  {
+    title: 'Configuration',
+    description: 'Configuration properties, defaults, customization, and troubleshooting.',
+    icon: IconFileSettingsFilled,
+    items: [{title: 'Configuration', link: 'configuration/'}],
+  },
+  {
+    title: 'Examples',
+    description: 'Runnable Java, Kotlin, database, and messaging applications.',
+    icon: IconAppsFilled,
+    items: [{title: 'Runnable Examples', link: 'examples/'}],
+  },
+];
+
 function parseVersionParts(version: string): Array<number | null> {
   return version.split('.').map((part) => (part === 'x' ? null : Number(part)));
 }
 
-function normalizeParts(
-  parts: Array<number | null>,
-  wildcardMax = false,
-  length = 3,
-): number[] {
+function normalizeParts(parts: Array<number | null>, wildcardMax = false, length = 3): number[] {
   const normalized: number[] = [];
 
   for (let index = 0; index < length; index += 1) {
@@ -118,7 +169,11 @@ function normalizeParts(
   return normalized;
 }
 
-function compareVersions(version: string, boundary: string, wildcardMaxForBoundary = false): number {
+function compareVersions(
+  version: string,
+  boundary: string,
+  wildcardMaxForBoundary = false,
+): number {
   if (version === 'next' && boundary === 'next') return 0;
   if (version === 'next') return 1;
   if (boundary === 'next') return -1;
@@ -144,9 +199,7 @@ function matchesWildcard(pattern: string, version: string): boolean {
   const patternParts = pattern.split('.');
   const versionParts = version.split('.');
 
-  return patternParts.every(
-    (part, index) => part === 'x' || part === versionParts[index],
-  );
+  return patternParts.every((part, index) => part === 'x' || part === versionParts[index]);
 }
 
 function isItemVisibleForVersion(item: VersionedReferenceItem, currentVersion: string): boolean {
@@ -158,10 +211,7 @@ function isItemVisibleForVersion(item: VersionedReferenceItem, currentVersion: s
     return false;
   }
 
-  if (
-    item.untilVersion &&
-    compareVersions(currentVersion, item.untilVersion, true) > 0
-  ) {
+  if (item.untilVersion && compareVersions(currentVersion, item.untilVersion, true) > 0) {
     return false;
   }
 
@@ -175,9 +225,7 @@ function ReferenceGroupCard({
   group: ReferenceGroup;
   currentVersion: string;
 }) {
-  const visibleItems = group.items.filter((item) =>
-    isItemVisibleForVersion(item, currentVersion),
-  );
+  const visibleItems = group.items.filter((item) => isItemVisibleForVersion(item, currentVersion));
 
   if (visibleItems.length === 0) return null;
 
@@ -206,25 +254,22 @@ function ReferenceGroupCard({
   );
 }
 
-export default function ReferenceOverview(): ReactNode {
-  const activeVersion = useActiveVersion('default');
-  const rawVersionName = activeVersion?.name;
-  const currentVersion =
-    rawVersionName === 'current' || !rawVersionName ? 'next' : rawVersionName;
+type Product = 'outbox' | 'once';
+
+export default function ReferenceOverview({product = 'outbox'}: {product?: Product}): ReactNode {
+  const version = useDocsVersion();
+  const currentVersion = version.version === 'current' ? 'next' : version.version;
+  const referenceGroups = product === 'once' ? onceReferenceGroups : outboxReferenceGroups;
 
   return (
     <section className={styles.referenceOverview}>
       <header className={styles.intro}>
         <h1>Reference</h1>
-        <p>Technical reference for Namastack Outbox.</p>
+        <p>Technical reference for Namastack {product === 'once' ? 'Once' : 'Outbox'}.</p>
       </header>
       <div className="row">
         {referenceGroups.map((group) => (
-          <ReferenceGroupCard
-            key={group.title}
-            group={group}
-            currentVersion={currentVersion}
-          />
+          <ReferenceGroupCard key={group.title} group={group} currentVersion={currentVersion} />
         ))}
       </div>
     </section>

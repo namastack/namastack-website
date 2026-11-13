@@ -1,10 +1,10 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import versions from './versions.json';
+import versions from './outbox_versions.json';
 import onceVersions from './once_versions.json';
 
-// First entry in versions.json is the latest stable version
+// First entry in outbox_versions.json is the latest stable version
 const latestVersion = versions[0];
 const olderVersions = versions.slice(1);
 
@@ -19,10 +19,11 @@ for (const v of olderVersions) {
 
 // Sitemap ignore patterns: exclude old versions, "next", and low-value pages
 const sitemapIgnorePatterns = [
-  '/docs/outbox/next/**',
+  '/outbox/next/**',
   '/legal-notice/**',
-  '/docs/once/**', // Once documentation is a pre-release preview.
-  ...olderVersions.map((v) => `/docs/outbox/${v}/**`),
+  '/once/next/**',
+  ...onceVersions.slice(1).map((v) => `/once/${v}/**`),
+  ...olderVersions.map((v) => `/outbox/${v}/**`),
 ];
 
 const config: Config = {
@@ -70,8 +71,10 @@ const config: Config = {
       {
         blog: false,
         docs: {
-          routeBasePath: '/docs/outbox',
-          sidebarPath: './sidebars.ts',
+          id: 'outbox',
+          path: 'docs-outbox',
+          routeBasePath: '/outbox',
+          sidebarPath: './sidebarsOutbox.ts',
           lastVersion: latestVersion,
           versions: versionConfig,
           editUrl: 'https://github.com/namastack/namastack-website/edit/main/',
@@ -112,13 +115,13 @@ const config: Config = {
       {
         id: 'once',
         path: 'docs-once',
-        routeBasePath: '/docs/once',
+        routeBasePath: '/once',
         sidebarPath: './sidebarsOnce.ts',
         lastVersion: onceVersions[0] ?? 'current',
         versions: {
           current: {label: 'Next', path: 'next', noIndex: true},
           ...Object.fromEntries(
-            onceVersions.map((version) => [version, {label: `${version} Preview`, noIndex: true}]),
+            onceVersions.map((version) => [version, {label: version, noIndex: version !== onceVersions[0]}]),
           ),
         },
         editUrl: 'https://github.com/namastack/namastack-website/edit/main/',
@@ -130,15 +133,16 @@ const config: Config = {
         hashed: true,
         language: 'en',
         indexDocs: true,
-        forceIgnoreNoIndex: true, // Preview and archived docs remain searchable within the site.
+        forceIgnoreNoIndex: true, // Next and archived docs remain searchable within the site.
         indexBlog: false,
         indexPages: true,
         highlightSearchTermsOnTargetPage: true,
-        docsRouteBasePath: ['/docs/outbox', '/docs/once'],
-        docsDir: ['docs', 'docs-once'],
+        docsRouteBasePath: ['/outbox', '/once'],
+        docsDir: ['docs-outbox', 'docs-once'],
+        docsPluginIdForPreferredVersion: 'outbox',
         searchContextByPaths: [
-          {path: 'docs/outbox', label: 'Outbox'},
-          {path: 'docs/once', label: 'Once'},
+          {path: 'outbox', label: 'Outbox'},
+          {path: 'once', label: 'Once'},
         ],
         useAllContextsWithNoSearchContext: true,
         explicitSearchResultPath: true,
@@ -172,33 +176,16 @@ const config: Config = {
         height: 28,
       },
       items: [
-        {
-          label: 'Products',
-          position: 'left',
-          items: [
-            {label: 'Namastack Outbox', to: '/outbox/'},
-            {label: 'Namastack Once', to: '/once/'},
-          ],
-        },
-        {
-          label: 'Docs',
-          to: '/docs/',
-          position: 'left',
-          items: [
-            {label: 'Outbox documentation', to: '/docs/outbox/'},
-            {label: 'Once documentation', to: '/docs/once/'},
-          ],
-        },
+        {label: 'Outbox', to: '/outbox/', position: 'left', activeBaseRegex: '^/outbox/'},
+        {label: 'Once', to: '/once/', position: 'left', activeBaseRegex: '^/once/'},
         {
           label: 'Community',
           position: 'left',
           items: [
             {label: 'Contributing', to: '/contributing/'},
-            {label: 'Outbox support policy', to: '/docs/outbox/support-and-update-policy/'},
-            {
-              label: 'Once security policy',
-              href: 'https://github.com/namastack/namastack-once/blob/main/SECURITY.md',
-            },
+            {label: 'Support policy', to: '/support-and-update-policy/'},
+            {label: 'Outbox security policy', to: '/outbox/security-policy/'},
+            {label: 'Once security policy', to: '/once/security-policy/'},
             {label: 'Discord', href: 'https://discord.gg/XNHP5Yhxy7'},
           ],
         },
@@ -211,7 +198,6 @@ const config: Config = {
           items: [
             {label: 'Namastack Outbox', href: 'https://github.com/namastack/namastack-outbox'},
             {label: 'Namastack Once', href: 'https://github.com/namastack/namastack-once'},
-            {label: 'Website', href: 'https://github.com/namastack/namastack-website'},
           ],
         },
       ],
@@ -229,9 +215,9 @@ const config: Config = {
         {
           title: 'Documentation',
           items: [
-            {label: 'Outbox quickstart', to: '/docs/outbox/quickstart/'},
-            {label: 'Once quickstart', to: '/docs/once/quickstart/'},
-            {label: 'Outbox migration guides', to: '/docs/outbox/next/migrations/'},
+            {label: 'Outbox quickstart', to: '/outbox/quickstart/'},
+            {label: 'Once quickstart', to: '/once/quickstart/'},
+            {label: 'Outbox migration guides', to: '/outbox/next/migrations/'},
           ],
         },
         {

@@ -11,166 +11,6 @@
   "trailingSlash": true,
   "redirects": [
     {
-      "source": "/docs/quickstart/:path(.*)",
-      "destination": "/docs/outbox/quickstart/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/quickstart/:path*",
-      "destination": "/docs/outbox/quickstart/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/reference/:path(.*)",
-      "destination": "/docs/outbox/reference/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/reference/:path*",
-      "destination": "/docs/outbox/reference/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/migrations/:path(.*)",
-      "destination": "/docs/outbox/migrations/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/migrations/:path*",
-      "destination": "/docs/outbox/migrations/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/next/:path(.*)",
-      "destination": "/docs/outbox/next/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/next/:path*",
-      "destination": "/docs/outbox/next/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.11.x/:path(.*)",
-      "destination": "/docs/outbox/:path",
-      "permanent": false
-    },
-    {
-      "source": "/docs/1.11.x/:path*",
-      "destination": "/docs/outbox/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/docs/1.10.x/:path(.*)",
-      "destination": "/docs/outbox/1.10.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.10.x/:path*",
-      "destination": "/docs/outbox/1.10.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.9.x/:path(.*)",
-      "destination": "/docs/outbox/1.9.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.9.x/:path*",
-      "destination": "/docs/outbox/1.9.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.8.x/:path(.*)",
-      "destination": "/docs/outbox/1.8.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.8.x/:path*",
-      "destination": "/docs/outbox/1.8.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.7.x/:path(.*)",
-      "destination": "/docs/outbox/1.7.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.7.x/:path*",
-      "destination": "/docs/outbox/1.7.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.6.x/:path(.*)",
-      "destination": "/docs/outbox/1.6.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.6.x/:path*",
-      "destination": "/docs/outbox/1.6.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.5.x/:path(.*)",
-      "destination": "/docs/outbox/1.5.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.5.x/:path*",
-      "destination": "/docs/outbox/1.5.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.4.x/:path(.*)",
-      "destination": "/docs/outbox/1.4.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.4.x/:path*",
-      "destination": "/docs/outbox/1.4.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.3.x/:path(.*)",
-      "destination": "/docs/outbox/1.3.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.3.x/:path*",
-      "destination": "/docs/outbox/1.3.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.2.x/:path(.*)",
-      "destination": "/docs/outbox/1.2.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.2.x/:path*",
-      "destination": "/docs/outbox/1.2.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.1.x/:path(.*)",
-      "destination": "/docs/outbox/1.1.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.1.x/:path*",
-      "destination": "/docs/outbox/1.1.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.0.x/:path(.*)",
-      "destination": "/docs/outbox/1.0.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/docs/1.0.x/:path*",
-      "destination": "/docs/outbox/1.0.x/:path*",
-      "permanent": true
-    },
-    {
       "source": "/docs/contributing/:path(.*)",
       "destination": "/contributing/:path",
       "permanent": true
@@ -202,172 +42,52 @@
     },
     {
       "source": "/docs/support-and-update-policy/:path(.*)",
-      "destination": "/docs/outbox/support-and-update-policy/:path",
+      "destination": "/support-and-update-policy/:path",
       "permanent": true
     },
     {
       "source": "/docs/support-and-update-policy/:path*",
-      "destination": "/docs/outbox/support-and-update-policy/:path*",
+      "destination": "/support-and-update-policy/:path*",
       "permanent": true
     },
     {
-      "source": "/outbox/quickstart/:path(.*)",
-      "destination": "/docs/outbox/quickstart/:path",
+      "source": "/docs/outbox/contributing/:path(.*)",
+      "destination": "/contributing/:path",
       "permanent": true
     },
     {
-      "source": "/outbox/quickstart/:path*",
-      "destination": "/docs/outbox/quickstart/:path*",
+      "source": "/docs/outbox/contributing/:path*",
+      "destination": "/contributing/:path*",
       "permanent": true
     },
     {
-      "source": "/outbox/reference/:path(.*)",
-      "destination": "/docs/outbox/reference/:path",
+      "source": "/docs/outbox/sponsor/:path(.*)",
+      "destination": "/sponsor/:path",
       "permanent": true
     },
     {
-      "source": "/outbox/reference/:path*",
-      "destination": "/docs/outbox/reference/:path*",
+      "source": "/docs/outbox/sponsor/:path*",
+      "destination": "/sponsor/:path*",
       "permanent": true
     },
     {
-      "source": "/outbox/migrations/:path(.*)",
-      "destination": "/docs/outbox/migrations/:path",
+      "source": "/docs/outbox/legal-notice/:path(.*)",
+      "destination": "/legal-notice/:path",
       "permanent": true
     },
     {
-      "source": "/outbox/migrations/:path*",
-      "destination": "/docs/outbox/migrations/:path*",
+      "source": "/docs/outbox/legal-notice/:path*",
+      "destination": "/legal-notice/:path*",
       "permanent": true
     },
     {
-      "source": "/outbox/next/:path(.*)",
-      "destination": "/docs/outbox/next/:path",
+      "source": "/docs/outbox/support-and-update-policy/:path(.*)",
+      "destination": "/support-and-update-policy/:path",
       "permanent": true
     },
     {
-      "source": "/outbox/next/:path*",
-      "destination": "/docs/outbox/next/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.11.x/:path(.*)",
-      "destination": "/docs/outbox/:path",
-      "permanent": false
-    },
-    {
-      "source": "/outbox/1.11.x/:path*",
-      "destination": "/docs/outbox/:path*",
-      "permanent": false
-    },
-    {
-      "source": "/outbox/1.10.x/:path(.*)",
-      "destination": "/docs/outbox/1.10.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.10.x/:path*",
-      "destination": "/docs/outbox/1.10.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.9.x/:path(.*)",
-      "destination": "/docs/outbox/1.9.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.9.x/:path*",
-      "destination": "/docs/outbox/1.9.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.8.x/:path(.*)",
-      "destination": "/docs/outbox/1.8.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.8.x/:path*",
-      "destination": "/docs/outbox/1.8.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.7.x/:path(.*)",
-      "destination": "/docs/outbox/1.7.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.7.x/:path*",
-      "destination": "/docs/outbox/1.7.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.6.x/:path(.*)",
-      "destination": "/docs/outbox/1.6.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.6.x/:path*",
-      "destination": "/docs/outbox/1.6.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.5.x/:path(.*)",
-      "destination": "/docs/outbox/1.5.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.5.x/:path*",
-      "destination": "/docs/outbox/1.5.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.4.x/:path(.*)",
-      "destination": "/docs/outbox/1.4.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.4.x/:path*",
-      "destination": "/docs/outbox/1.4.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.3.x/:path(.*)",
-      "destination": "/docs/outbox/1.3.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.3.x/:path*",
-      "destination": "/docs/outbox/1.3.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.2.x/:path(.*)",
-      "destination": "/docs/outbox/1.2.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.2.x/:path*",
-      "destination": "/docs/outbox/1.2.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.1.x/:path(.*)",
-      "destination": "/docs/outbox/1.1.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.1.x/:path*",
-      "destination": "/docs/outbox/1.1.x/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.0.x/:path(.*)",
-      "destination": "/docs/outbox/1.0.x/:path",
-      "permanent": true
-    },
-    {
-      "source": "/outbox/1.0.x/:path*",
-      "destination": "/docs/outbox/1.0.x/:path*",
+      "source": "/docs/outbox/support-and-update-policy/:path*",
+      "destination": "/support-and-update-policy/:path*",
       "permanent": true
     },
     {
@@ -402,12 +122,672 @@
     },
     {
       "source": "/outbox/support-and-update-policy/:path(.*)",
-      "destination": "/docs/outbox/support-and-update-policy/:path",
+      "destination": "/support-and-update-policy/:path",
       "permanent": true
     },
     {
       "source": "/outbox/support-and-update-policy/:path*",
-      "destination": "/docs/outbox/support-and-update-policy/:path*",
+      "destination": "/support-and-update-policy/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/contributing/:path(.*)",
+      "destination": "/contributing/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/contributing/:path*",
+      "destination": "/contributing/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/sponsor/:path(.*)",
+      "destination": "/sponsor/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/sponsor/:path*",
+      "destination": "/sponsor/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/legal-notice/:path(.*)",
+      "destination": "/legal-notice/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/legal-notice/:path*",
+      "destination": "/legal-notice/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/support-and-update-policy/:path(.*)",
+      "destination": "/support-and-update-policy/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/support-and-update-policy/:path*",
+      "destination": "/support-and-update-policy/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/contributing/:path(.*)",
+      "destination": "/contributing/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/contributing/:path*",
+      "destination": "/contributing/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/sponsor/:path(.*)",
+      "destination": "/sponsor/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/sponsor/:path*",
+      "destination": "/sponsor/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/legal-notice/:path(.*)",
+      "destination": "/legal-notice/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/legal-notice/:path*",
+      "destination": "/legal-notice/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/support-and-update-policy/:path(.*)",
+      "destination": "/support-and-update-policy/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/support-and-update-policy/:path*",
+      "destination": "/support-and-update-policy/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/quickstart/:path(.*)",
+      "destination": "/outbox/quickstart/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/quickstart/:path*",
+      "destination": "/outbox/quickstart/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/:path(.*)",
+      "destination": "/outbox/reference/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/reference/:path*",
+      "destination": "/outbox/reference/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/migrations/:path(.*)",
+      "destination": "/outbox/migrations/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/migrations/:path*",
+      "destination": "/outbox/migrations/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/next/:path(.*)",
+      "destination": "/outbox/next/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/next/:path*",
+      "destination": "/outbox/next/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.11.x/:path(.*)",
+      "destination": "/outbox/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/1.11.x/:path*",
+      "destination": "/outbox/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/1.10.x/:path(.*)",
+      "destination": "/outbox/1.10.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.10.x/:path*",
+      "destination": "/outbox/1.10.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.9.x/:path(.*)",
+      "destination": "/outbox/1.9.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.9.x/:path*",
+      "destination": "/outbox/1.9.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.8.x/:path(.*)",
+      "destination": "/outbox/1.8.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.8.x/:path*",
+      "destination": "/outbox/1.8.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.7.x/:path(.*)",
+      "destination": "/outbox/1.7.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.7.x/:path*",
+      "destination": "/outbox/1.7.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.6.x/:path(.*)",
+      "destination": "/outbox/1.6.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.6.x/:path*",
+      "destination": "/outbox/1.6.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.5.x/:path(.*)",
+      "destination": "/outbox/1.5.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.5.x/:path*",
+      "destination": "/outbox/1.5.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.4.x/:path(.*)",
+      "destination": "/outbox/1.4.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.4.x/:path*",
+      "destination": "/outbox/1.4.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.3.x/:path(.*)",
+      "destination": "/outbox/1.3.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.3.x/:path*",
+      "destination": "/outbox/1.3.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.2.x/:path(.*)",
+      "destination": "/outbox/1.2.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.2.x/:path*",
+      "destination": "/outbox/1.2.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.1.x/:path(.*)",
+      "destination": "/outbox/1.1.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.1.x/:path*",
+      "destination": "/outbox/1.1.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.0.x/:path(.*)",
+      "destination": "/outbox/1.0.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.0.x/:path*",
+      "destination": "/outbox/1.0.x/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/concepts/:path(.*)",
+      "destination": "/once/reference/concepts/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/concepts/:path*",
+      "destination": "/once/reference/concepts/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/usage/:path(.*)",
+      "destination": "/once/reference/usage/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/usage/:path*",
+      "destination": "/once/reference/usage/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/persistence/:path(.*)",
+      "destination": "/once/reference/persistence/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/persistence/:path*",
+      "destination": "/once/reference/persistence/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/operations/:path(.*)",
+      "destination": "/once/reference/operations/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/operations/:path*",
+      "destination": "/once/reference/operations/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/configuration/:path(.*)",
+      "destination": "/once/reference/configuration/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/configuration/:path*",
+      "destination": "/once/reference/configuration/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/examples/:path(.*)",
+      "destination": "/once/reference/examples/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/examples/:path*",
+      "destination": "/once/reference/examples/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/concepts/:path(.*)",
+      "destination": "/once/next/reference/concepts/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/concepts/:path*",
+      "destination": "/once/next/reference/concepts/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/usage/:path(.*)",
+      "destination": "/once/next/reference/usage/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/usage/:path*",
+      "destination": "/once/next/reference/usage/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/persistence/:path(.*)",
+      "destination": "/once/next/reference/persistence/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/persistence/:path*",
+      "destination": "/once/next/reference/persistence/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/operations/:path(.*)",
+      "destination": "/once/next/reference/operations/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/operations/:path*",
+      "destination": "/once/next/reference/operations/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/configuration/:path(.*)",
+      "destination": "/once/next/reference/configuration/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/configuration/:path*",
+      "destination": "/once/next/reference/configuration/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/examples/:path(.*)",
+      "destination": "/once/next/reference/examples/:path",
+      "permanent": true
+    },
+    {
+      "source": "/once/next/examples/:path*",
+      "destination": "/once/next/reference/examples/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/once/0.1.x/concepts/:path(.*)",
+      "destination": "/once/reference/concepts/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/concepts/:path*",
+      "destination": "/once/reference/concepts/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/usage/:path(.*)",
+      "destination": "/once/reference/usage/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/usage/:path*",
+      "destination": "/once/reference/usage/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/persistence/:path(.*)",
+      "destination": "/once/reference/persistence/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/persistence/:path*",
+      "destination": "/once/reference/persistence/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/operations/:path(.*)",
+      "destination": "/once/reference/operations/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/operations/:path*",
+      "destination": "/once/reference/operations/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/configuration/:path(.*)",
+      "destination": "/once/reference/configuration/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/configuration/:path*",
+      "destination": "/once/reference/configuration/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/examples/:path(.*)",
+      "destination": "/once/reference/examples/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/examples/:path*",
+      "destination": "/once/reference/examples/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/concepts/:path(.*)",
+      "destination": "/once/reference/concepts/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/concepts/:path*",
+      "destination": "/once/reference/concepts/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/usage/:path(.*)",
+      "destination": "/once/reference/usage/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/usage/:path*",
+      "destination": "/once/reference/usage/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/persistence/:path(.*)",
+      "destination": "/once/reference/persistence/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/persistence/:path*",
+      "destination": "/once/reference/persistence/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/operations/:path(.*)",
+      "destination": "/once/reference/operations/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/operations/:path*",
+      "destination": "/once/reference/operations/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/configuration/:path(.*)",
+      "destination": "/once/reference/configuration/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/configuration/:path*",
+      "destination": "/once/reference/configuration/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/examples/:path(.*)",
+      "destination": "/once/reference/examples/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/examples/:path*",
+      "destination": "/once/reference/examples/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/concepts/:path(.*)",
+      "destination": "/once/next/reference/concepts/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/concepts/:path*",
+      "destination": "/once/next/reference/concepts/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/usage/:path(.*)",
+      "destination": "/once/next/reference/usage/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/usage/:path*",
+      "destination": "/once/next/reference/usage/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/persistence/:path(.*)",
+      "destination": "/once/next/reference/persistence/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/persistence/:path*",
+      "destination": "/once/next/reference/persistence/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/operations/:path(.*)",
+      "destination": "/once/next/reference/operations/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/operations/:path*",
+      "destination": "/once/next/reference/operations/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/configuration/:path(.*)",
+      "destination": "/once/next/reference/configuration/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/configuration/:path*",
+      "destination": "/once/next/reference/configuration/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/examples/:path(.*)",
+      "destination": "/once/next/reference/examples/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/next/examples/:path*",
+      "destination": "/once/next/reference/examples/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/0.1.x/concepts/:path(.*)",
+      "destination": "/once/reference/concepts/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/concepts/:path*",
+      "destination": "/once/reference/concepts/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/usage/:path(.*)",
+      "destination": "/once/reference/usage/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/usage/:path*",
+      "destination": "/once/reference/usage/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/persistence/:path(.*)",
+      "destination": "/once/reference/persistence/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/persistence/:path*",
+      "destination": "/once/reference/persistence/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/operations/:path(.*)",
+      "destination": "/once/reference/operations/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/operations/:path*",
+      "destination": "/once/reference/operations/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/configuration/:path(.*)",
+      "destination": "/once/reference/configuration/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/configuration/:path*",
+      "destination": "/once/reference/configuration/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/examples/:path(.*)",
+      "destination": "/once/reference/examples/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/examples/:path*",
+      "destination": "/once/reference/examples/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/outbox/1.11.x/:path(.*)",
+      "destination": "/outbox/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/outbox/1.11.x/:path*",
+      "destination": "/outbox/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/outbox/1.11.x/:path(.*)",
+      "destination": "/outbox/:path",
+      "permanent": false
+    },
+    {
+      "source": "/outbox/1.11.x/:path*",
+      "destination": "/outbox/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/outbox/:path(.*)",
+      "destination": "/outbox/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/outbox/:path*",
+      "destination": "/outbox/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/0.1.x/:path(.*)",
+      "destination": "/once/:path",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/0.1.x/:path*",
+      "destination": "/once/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/:path(.*)",
+      "destination": "/once/:path",
+      "permanent": false
+    },
+    {
+      "source": "/once/0.1.x/:path*",
+      "destination": "/once/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/docs/once/:path(.*)",
+      "destination": "/once/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/once/:path*",
+      "destination": "/once/:path*",
       "permanent": true
     },
     {

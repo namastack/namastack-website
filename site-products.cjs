@@ -1,45 +1,67 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const outboxVersions = require('./versions.json');
+const outboxVersions = require('./outbox_versions.json');
 const onceVersionsPath = path.join(__dirname, 'once_versions.json');
 const onceVersions = fs.existsSync(onceVersionsPath)
   ? JSON.parse(fs.readFileSync(onceVersionsPath, 'utf8'))
   : [];
 
 const products = [
-  {id: 'default', name: 'Outbox', route: 'docs/outbox', versions: outboxVersions},
-  {id: 'once', name: 'Once', route: 'docs/once', versions: onceVersions},
+  {id: 'outbox', name: 'Outbox', route: 'outbox', versions: outboxVersions},
+  {id: 'once', name: 'Once', route: 'once', versions: onceVersions},
 ];
 
 function getLegacyRedirects() {
   const redirects = [];
-  for (const prefix of ['/docs', '/outbox']) {
-    for (const section of ['quickstart', 'reference', 'migrations', 'next']) {
-      redirects.push({
-        source: `${prefix}/${section}/:path*`,
-        destination: `/docs/outbox/${section}/:path*`,
-        permanent: true,
-      });
+  const add = (source, destination, permanent = true) =>
+    redirects.push({source: `${source}/:path*`, destination: `${destination}/:path*`, permanent});
+
+  for (const prefix of ['/docs', '/docs/outbox', '/outbox', '/docs/once', '/once']) {
+    for (const page of ['contributing', 'sponsor', 'legal-notice', 'support-and-update-policy']) {
+      add(`${prefix}/${page}`, `/${page}`);
     }
-    for (const [index, version] of outboxVersions.entries()) {
-      redirects.push({
-        source: `${prefix}/${version}/:path*`,
-        destination: `/docs/outbox/${index === 0 ? '' : `${version}/`}:path*`,
-        permanent: index !== 0,
-      });
+  }
+  for (const section of ['quickstart', 'reference', 'migrations', 'next']) {
+    add(`/docs/${section}`, `/outbox/${section}`);
+  }
+  for (const [index, version] of outboxVersions.entries()) {
+    add(`/docs/${version}`, `/outbox${index === 0 ? '' : `/${version}`}`, index !== 0);
+  }
+  // Once technical pages now follow the same /reference/ structure as Outbox.
+  const oncePrefixes = [
+    {source: '', target: '', permanent: true},
+    {source: 'next/', target: 'next/', permanent: true},
+    ...onceVersions.map((version, index) => ({
+      source: `${version}/`,
+      target: index === 0 ? '' : `${version}/`,
+      permanent: index !== 0,
+    })),
+  ];
+  for (const namespace of ['/once', '/docs/once']) {
+    for (const prefix of oncePrefixes) {
+      for (const section of [
+        'concepts',
+        'usage',
+        'persistence',
+        'operations',
+        'configuration',
+        'examples',
+      ]) {
+        add(
+          `${namespace}/${prefix.source}${section}`,
+          `/once/${prefix.target}reference/${section}`,
+          prefix.permanent,
+        );
+      }
     }
-    for (const page of ['contributing', 'sponsor', 'legal-notice']) {
-      redirects.push({
-        source: `${prefix}/${page}/:path*`,
-        destination: `/${page}/:path*`,
-        permanent: true,
-      });
+  }
+  for (const product of products) {
+    const latest = product.versions[0];
+    if (latest) {
+      add(`/docs/${product.route}/${latest}`, `/${product.route}`, false);
+      add(`/${product.route}/${latest}`, `/${product.route}`, false);
     }
-    redirects.push({
-      source: `${prefix}/support-and-update-policy/:path*`,
-      destination: '/docs/outbox/support-and-update-policy/:path*',
-      permanent: true,
-    });
+    add(`/docs/${product.route}`, `/${product.route}`);
   }
   redirects.push(
     {source: '/outbox/search/:path*', destination: '/search/:path*', permanent: true},

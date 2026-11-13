@@ -57,11 +57,24 @@ module.exports = function siteMigrationPlugin({siteConfig}) {
       }
       // Real HTTP redirects are configured on Vercel. These fallbacks also work
       // on ordinary static hosting, retaining query strings and fragment links.
+      // Snapshot real output before generating fallbacks so aliases cannot be
+      // recursively copied into themselves or into a second legacy namespace.
+      const originalHtmlFiles = findHtmlFiles(outDir);
       for (const rule of getLegacyRedirects()) {
         const source = rule.source.replace(/\/:path(?:\*|\(\.\*\))$/, '');
         const target = rule.destination.replace(/\/:path\*?$/, '');
-        for (const file of findHtmlFiles(path.join(outDir, target))) {
-          const relative = path.relative(path.join(outDir, target), file);
+        const targetDir = path.join(outDir, target);
+        const product = products.find((item) => target === `/${item.route}`);
+        for (const file of originalHtmlFiles) {
+          const relative = path.relative(targetDir, file);
+          if (relative.startsWith('..') || path.isAbsolute(relative)) continue;
+          // A latest-version alias only exposes that snapshot, not other versions.
+          if (
+            product &&
+            source.endsWith(`/${product.versions[0]}`) &&
+            ['next', ...product.versions.slice(1)].includes(relative.split(path.sep)[0])
+          )
+            continue;
           const route = relative.replace(/index\.html$/, '').replaceAll(path.sep, '/');
           const dest = `${target}/${route}`;
           const output = path.join(outDir, source, relative);
@@ -69,10 +82,7 @@ module.exports = function siteMigrationPlugin({siteConfig}) {
         }
       }
       const exclusions = products.flatMap((product) => {
-        const prefixes =
-          product.id === 'once'
-            ? ['', 'next/', ...product.versions.slice(1).map((v) => `${v}/`)]
-            : ['next/', ...product.versions.slice(1).map((v) => `${v}/`)];
+        const prefixes = ['next/', ...product.versions.slice(1).map((v) => `${v}/`)];
         return prefixes.map((prefix) => `Disallow: /${product.route}/${prefix}`);
       });
       fs.writeFileSync(

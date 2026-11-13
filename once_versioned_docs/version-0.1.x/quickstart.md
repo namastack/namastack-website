@@ -2,66 +2,38 @@
 title: Quickstart
 ---
 
-This guide uses Java 17 or later, Spring Boot 4.1 and a JDBC datasource. Once is currently a preview: there is no stable Maven Central release yet.
+This guide uses Namastack Once **0.1.0**, Java 17 or later, Spring Boot 4.1 and a JDBC datasource.
 
-## 1. Make the development artifacts available
+## 1. Add the dependencies
 
-Build the [Once source checkout](https://github.com/namastack/namastack-once) locally:
-
-```bash
-./gradlew publishToMavenLocal
-```
-
-In your application, add Maven local for this development build, the BOM, a persistence starter and your database driver:
+Add the Once BOM, a persistence starter and your database driver. The artifacts are available from Maven Central:
 
 ```kotlin
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation(platform("io.namastack:namastack-once-bom:0.1.0-SNAPSHOT"))
+    implementation(platform("io.namastack:namastack-once-bom:0.1.0"))
     implementation("io.namastack:namastack-once-starter-jdbc")
     runtimeOnly("org.postgresql:postgresql")
 }
 ```
 
-Alternatively run an example directly against the source checkout, as shown in [Examples](examples.md).
+For a complete runnable application, see [Examples](reference/examples.md).
 
 ## 2. Apply the database schema
 
-Once **never creates or migrates tables**. Apply the matching [database script](persistence/jdbc.md#schema-scripts) with Flyway, Liquibase or your deployment tooling before accepting traffic. For PostgreSQL, the marker schema is:
+Once **never creates or migrates tables**. Apply the schema matching your database before accepting traffic.
 
-```sql
-CREATE TABLE once_marker (
-    idempotency_hash CHAR(64) NOT NULL PRIMARY KEY,
-    scope VARCHAR(200) NOT NULL,
-    created_at TIMESTAMP(6) NOT NULL,
-    expires_at TIMESTAMP(6) NULL
-);
-CREATE INDEX ix_once_marker_expires_at
-    ON once_marker (expires_at, idempotency_hash);
-```
+**Schema Files for Flyway/Liquibase:**
 
-For this example, create a business table in the same database:
+You can find the SQL schema files here:
+👉 [Schema Files on GitHub](https://github.com/namastack/namastack-once/tree/main/namastack-once-jdbc/src/main/resources/schema)
 
-```sql
-CREATE TABLE orders (
-    id VARCHAR(36) PRIMARY KEY,
-    customer VARCHAR(200) NOT NULL
-);
-```
+For the application code below, also provision an `orders` table with a string primary key `id` and a non-null string `customer` column in the same database. Configure the datasource through Spring Boot's `spring.datasource.url`, `spring.datasource.username` and `spring.datasource.password` properties.
 
-Configure your datasource through the normal Spring Boot properties:
-
-```yaml
-spring:
-  datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
-```
+See [JDBC persistence](reference/persistence/jdbc.md) for driver selection, schema configuration and transaction-manager requirements.
 
 ## 3. Protect the application boundary
 
@@ -88,12 +60,18 @@ public class OrderHandler {
 }
 ```
 
-Call the injected Spring bean from a controller, listener or another bean. Reuse the **same request ID** for retries of the same operation. The first call inserts the order; a second call with the same scope and key skips the method. A `void` method returns normally for both outcomes. Use [IdempotencyResult](usage/programmatic.md) when the caller needs to distinguish them.
+Call the injected Spring bean from a controller, listener or another bean. Reuse the **same request ID** for retries of the same operation. The first call inserts the order; a second call with the same scope and key skips the method. A `void` method returns normally for both outcomes. Use [IdempotencyResult](reference/usage/programmatic.md) when the caller needs to distinguish them.
 
 Do not add `@Transactional` to this entry point. Once must start and own the transaction. Calls must cross the Spring proxy; self-invocation is not intercepted. Kotlin beans must be open, typically through the Kotlin Spring plugin.
 
 ## 4. Verify the failure boundary
 
-If the method throws, its database writes and marker roll back together. A later invocation with the same identity can try again. External calls are not rolled back: put durable outgoing work in [Namastack Outbox](/docs/outbox/) inside the business transaction and process it asynchronously.
+If the method throws, its database writes and marker roll back together. A later invocation with the same identity can try again. External calls are not rolled back: put durable outgoing work in [Namastack Outbox](/outbox/) inside the business transaction and process it asynchronously.
 
-Read [transactions and guarantees](concepts/transactions.md) before using finite retention or acknowledging messages.
+Read [transactions and guarantees](reference/concepts/transactions.md) before using finite retention or acknowledging messages.
+
+## 5. Choose persistence and operations settings
+
+The JDBC starter also supports MySQL, MariaDB, Microsoft SQL Server, Oracle and H2. Use the database-specific driver and schema from [JDBC persistence](reference/persistence/jdbc.md). For MongoDB, choose the MongoDB starter and a transaction-capable replica set or sharded cluster instead.
+
+Markers are retained forever by default. Configure a [retention policy](reference/operations/retention.md) if you want cleanup to remove them, and add [observability](reference/operations/observability.md) to inspect execution outcomes and cleanup batches. A configured cleanup interval alone does not make forever markers expire.
