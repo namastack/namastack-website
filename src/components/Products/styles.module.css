@@ -1,0 +1,580 @@
+.page {
+  background: var(--ns-surface-base);
+  color: var(--ns-text-primary);
+}
+.container {
+  width: min(100% - 3rem, 1200px);
+  margin-inline: auto;
+}
+.eyebrow {
+  font-family: var(--ns-font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--ns-accent);
+}
+.homeHero,
+.onceHero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ns-border-subtle);
+  background: radial-gradient(
+    ellipse at 85% 30%,
+    color-mix(in srgb, var(--ns-accent) 5%, transparent),
+    transparent 55%
+  );
+}
+.homeHero {
+  padding: 6rem 0 0;
+}
+.homeHeroGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+.homeIntro h1 {
+  margin: 1.25rem 0 1.4rem;
+  font-size: clamp(2.8rem, 4.7vw, 4.5rem);
+  font-weight: 650;
+  letter-spacing: -0.06em;
+  line-height: 1.08;
+}
+.homeIntro h1 em {
+  font-style: normal;
+  color: var(--ns-accent);
+}
+.homeIntro p,
+.lead {
+  max-width: 580px;
+  color: var(--ns-text-muted);
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+  align-items: center;
+}
+.primary,
+.secondary {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.05rem;
+  border-radius: 4px;
+  min-height: 43px;
+  font-size: 0.82rem;
+  font-weight: 650;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.primary {
+  background: var(--ns-accent);
+  color: #10100d;
+}
+.primary:hover {
+  background: var(--ns-accent-hover);
+  color: #10100d;
+  text-decoration: none;
+}
+.secondary {
+  border-color: var(--ns-border-active);
+  color: var(--ns-text-primary);
+}
+.secondary:hover {
+  border-color: var(--ns-accent);
+  color: var(--ns-accent);
+  text-decoration: none;
+}
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ns-accent);
+  font-size: 0.83rem;
+  font-weight: 600;
+}
+.dualArt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  position: relative;
+  align-items: center;
+}
+
+.dualArt > div {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  text-align: center;
+  padding: 1rem 0.2rem 1.5rem;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--ns-accent) 5%, transparent),
+    transparent 75%
+  );
+}
+.dualArt span,
+.onceArt > span {
+  display: block;
+  text-align: center;
+  color: var(--ns-text-muted);
+  font-family: var(--ns-font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+}
+.largeGlyph {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 16px 24px rgb(0 0 0 / 20%));
+  color: var(--ns-accent);
+}
+
+.facts {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 5rem;
+  padding: 1.3rem 0;
+  color: var(--ns-text-muted);
+  border-top: 1px solid var(--ns-border-subtle);
+  font-family: var(--ns-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+}
+.section {
+  padding: 5rem 0;
+}
+.surface {
+  padding: 4.5rem 0;
+  background: var(--ns-surface-raised);
+  border-block: 1px solid var(--ns-border-subtle);
+}
+.sectionHeading {
+  max-width: 680px;
+  margin-bottom: 2.2rem;
+}
+.sectionHeading h2 {
+  margin: 0.85rem 0 1rem;
+  font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+  line-height: 1.13;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+.sectionHeading p {
+  color: var(--ns-text-muted);
+  font-size: 0.94rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+.productGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+.productCard {
+  padding: 2rem;
+  border: 1px solid var(--ns-border-active);
+  border-radius: 8px;
+  background: var(--ns-surface-raised);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.release {
+  font-family: var(--ns-font-mono);
+  font-size: 0.58rem;
+  white-space: nowrap;
+  color: var(--ns-text-muted);
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--ns-border-subtle);
+  border-radius: 3px;
+}
+.cardHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.3rem 0 1rem;
+}
+.cardHeading h2 {
+  font-size: clamp(2rem, 3vw, 2.65rem);
+  letter-spacing: -0.05em;
+  line-height: 1.12;
+  font-weight: 600;
+  margin: 0;
+}
+.dot {
+  color: var(--ns-accent);
+}
+.glyph {
+  width: 130px;
+  height: 125px;
+  flex-shrink: 0;
+  color: var(--ns-accent);
+}
+.productCard > p {
+  font-size: 0.91rem;
+  color: var(--ns-text-muted);
+  line-height: 1.8;
+  max-width: 460px;
+  margin-bottom: 1.2rem;
+}
+.checks {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.8rem;
+}
+.checks li {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  color: var(--ns-text-muted);
+  font-size: 0.78rem;
+  padding: 0.38rem 0;
+}
+.checks svg {
+  color: var(--ns-accent);
+  flex-shrink: 0;
+}
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ns-border-subtle);
+}
+.flow {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 0;
+  margin: 2rem 0 1.5rem;
+}
+.flow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem;
+  background: var(--ns-surface-base);
+  border: 1px solid var(--ns-border-subtle);
+  font-size: 0.77rem;
+  font-weight: 600;
+}
+.flow li + li {
+  border-left: 0;
+}
+.flow li > span {
+  color: var(--ns-accent);
+  font-family: var(--ns-font-mono);
+  font-size: 0.64rem;
+}
+.flow li:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -0.5rem;
+  top: 45%;
+  color: var(--ns-accent);
+  z-index: 1;
+}
+.filmGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.film {
+  margin: 0;
+}
+.film figcaption h3 {
+  font-size: 1.1rem;
+  margin: 0.6rem 0 1.25rem;
+  letter-spacing: -0.025em;
+  font-weight: 550;
+}
+.film video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  border: 1px solid var(--ns-border-active);
+  border-radius: 8px;
+  background: #080a0b;
+}
+.onceHero {
+  padding: 5rem 0;
+}
+.onceHeroGrid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: center;
+  gap: 3rem;
+}
+.onceHero h1 {
+  font-size: clamp(5rem, 9.5vw, 8rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 1.2rem 0 1rem;
+  letter-spacing: -0.075em;
+}
+.onceTagline {
+  color: var(--ns-text-primary);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  letter-spacing: -0.035em;
+  margin-bottom: 1.2rem;
+}
+.onceArt {
+  position: relative;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--ns-accent) 9%, transparent),
+    transparent 65%
+  );
+  padding-bottom: 1.5rem;
+}
+.onceArt::after {
+  content: '';
+  position: absolute;
+  inset: 5%;
+  border: 1px solid var(--ns-border-subtle);
+  border-radius: 50%;
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+.onceArt .largeGlyph {
+  width: 100%;
+  max-width: 510px;
+  margin-inline: auto;
+}
+.releaseNote {
+  margin: 1.5rem 0 0;
+  color: var(--ns-text-muted);
+  font-size: 0.71rem;
+  line-height: 1.9;
+}
+.codeLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.codeLayout .sectionHeading {
+  margin: 0;
+}
+.codePanel {
+  border: 1px solid var(--ns-border-active);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--ns-surface-raised);
+  min-width: 0;
+}
+.codeTabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.65rem;
+  border-bottom: 1px solid var(--ns-border-subtle);
+}
+.codeTabs button {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ns-text-muted);
+  padding: 0.5rem 0.65rem;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.73rem;
+  cursor: pointer;
+}
+.codeTabs button[aria-selected='true'] {
+  border-color: var(--ns-border-active);
+  background: var(--ns-surface-base);
+  color: var(--ns-accent);
+}
+.codePanel pre {
+  margin: 0;
+  font-size: 0.78rem;
+  border-radius: 0;
+}
+.codePanel > p {
+  font-size: 0.68rem;
+  line-height: 1.7;
+  color: var(--ns-text-muted);
+  margin: 0;
+  padding: 1rem;
+  border-top: 1px solid var(--ns-border-subtle);
+}
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  margin-top: 4rem;
+}
+.featureGrid article {
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--ns-border-active);
+}
+.featureGrid svg {
+  color: var(--ns-accent);
+}
+.featureGrid h3 {
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  margin: 1rem 0 0.7rem;
+}
+.featureGrid p {
+  font-size: 0.82rem;
+  line-height: 1.8;
+  color: var(--ns-text-muted);
+  margin: 0;
+}
+.primary:focus-visible,
+.secondary:focus-visible,
+.codeTabs button:focus-visible,
+.textLink:focus-visible {
+  outline: 2px solid var(--ns-accent);
+  outline-offset: 4px;
+}
+@media (max-width: 996px) {
+  .homeHeroGrid {
+    grid-template-columns: 1fr;
+  }
+  .homeIntro {
+    max-width: 740px;
+  }
+  .homeIntro h1 {
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+  }
+  .dualArt {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .dualArt .largeGlyph {
+    max-height: 210px;
+  }
+  .facts {
+    margin-top: 2rem;
+  }
+  .onceHeroGrid {
+    gap: 1rem;
+  }
+  .onceHero h1 {
+    font-size: 6rem;
+  }
+  .codeLayout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .cardHeading .glyph {
+    width: 95px;
+  }
+  .productCard {
+    padding: 1.5rem;
+  }
+  .cardTop {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+@media (max-width: 680px) {
+  .container {
+    width: calc(100% - 2rem);
+  }
+  .homeHero {
+    padding-top: 3rem;
+  }
+  .homeIntro h1 {
+    font-size: 2.8rem;
+  }
+  .homeIntro p,
+  .lead {
+    font-size: 0.93rem;
+  }
+  .dualArt {
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .dualArt .largeGlyph {
+    max-height: 160px;
+  }
+
+  .facts {
+    font-size: 0.58rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .section,
+  .surface {
+    padding: 3rem 0;
+  }
+  .productGrid,
+  .filmGrid,
+  .onceHeroGrid {
+    grid-template-columns: 1fr;
+  }
+  .cardTop {
+    flex-direction: row;
+    align-items: center;
+  }
+  .productCard {
+    padding: 1.4rem;
+  }
+  .cardHeading .glyph {
+    width: 115px;
+  }
+  .onceHero {
+    padding: 3rem 0;
+  }
+  .onceHero h1 {
+    font-size: 5.8rem;
+  }
+  .onceArt {
+    max-width: 350px;
+    width: 100%;
+    margin: 1rem auto 0;
+  }
+  .featureGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.3rem;
+    margin-top: 2.5rem;
+  }
+  .flow {
+    grid-template-columns: 1fr;
+  }
+  .flow li {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  .flow li + li {
+    border-left: 1px solid var(--ns-border-subtle);
+    border-top: 0;
+  }
+  .flow li:not(:last-child)::after {
+    content: '↓';
+    top: auto;
+    right: 1.4rem;
+    bottom: -0.65rem;
+  }
+  .filmGrid {
+    gap: 2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page * {
+    scroll-behavior: auto;
+  }
+}

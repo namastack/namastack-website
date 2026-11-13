@@ -1,240 +1,117 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
+const {products, getLegacyRedirects} = require('../site-products.cjs');
 
-/**
- * Keeps versioned documentation SEO signals aligned with the latest docs,
- * emits robots.txt, and generates static fallback redirects for the former
- * /outbox/* documentation routes.
- *
- * Vercel handles redirects before static files in production. The generated
- * files keep the migration working on any static host as well.
- */
-module.exports = function siteMigrationPlugin(context) {
-  const {siteConfig} = context;
-  const siteUrl = siteConfig.url;
-  const baseUrl = siteConfig.baseUrl;
-  const docsPath = 'docs';
-
-  const versionsPath = path.join(context.siteDir, 'versions.json');
-  const versions = JSON.parse(fs.readFileSync(versionsPath, 'utf-8'));
-  const olderVersions = versions.slice(1);
-  const versionPrefixes = [...olderVersions, 'next'];
-  const builtVersions = [
-    {version: versions[0], prefix: ''},
-    ...olderVersions.map((version) => ({version, prefix: version})),
-    {version: 'next', prefix: 'next'},
-  ];
-
+module.exports = function siteMigrationPlugin({siteConfig}) {
   return {
     name: 'site-migration-plugin',
-
     async postBuild({outDir}) {
-      const docsDir = path.join(outDir, docsPath);
-
-      rewriteVersionCanonicals(docsDir, versionPrefixes, siteUrl, baseUrl, docsPath);
-      createLegacyDocumentationRedirects(docsDir, outDir, siteUrl, baseUrl, docsPath);
-      createMergedReferenceRedirects(outDir, builtVersions, siteUrl, baseUrl, docsPath);
-      writeRobotsTxt(outDir, versionPrefixes, siteUrl, baseUrl, docsPath);
+      const siteUrl = siteConfig.url;
+      for (const product of products) {
+        const root = path.join(outDir, product.route);
+        const prefixes = [...product.versions.slice(1), 'next'];
+        for (const prefix of prefixes) {
+          for (const file of findHtmlFiles(path.join(root, prefix))) {
+            const relative = path.relative(path.join(root, prefix), file);
+            // A Next-only page must not canonicalize to a nonexistent stable page.
+            if (!fs.existsSync(path.join(root, relative))) continue;
+            const html = fs.readFileSync(file, 'utf8');
+            const before = `${siteUrl}/${product.route}/${prefix}/`;
+            const after = `${siteUrl}/${product.route}/`;
+            fs.writeFileSync(
+              file,
+              html.replace(
+                new RegExp(`(<link[^>]*rel="canonical"[^>]*href=")${escapeRegExp(before)}`),
+                `$1${after}`,
+              ),
+            );
+          }
+        }
+      }
+      const outbox = products[0];
+      const versions = [
+        {name: outbox.versions[0], prefix: ''},
+        ...outbox.versions.slice(1).map((name) => ({name, prefix: `${name}/`})),
+        {name: 'next', prefix: 'next/'},
+      ];
+      for (const {name, prefix} of versions) {
+        for (const [source, target, anchor, since] of [
+          ['mongodb-schema', 'database', 'mongodb-schema', 5],
+          ['rabbitmq', 'messaging', 'rabbitmq-integration', 7],
+        ]) {
+          if (
+            name !== 'next' &&
+            Number(name.split('.')[0]) === 1 &&
+            Number(name.split('.')[1]) < since
+          )
+            continue;
+          const targetPath = `/${outbox.route}/${prefix}reference/${target}/`;
+          if (fs.existsSync(path.join(outDir, targetPath, 'index.html'))) {
+            writeRedirect(
+              path.join(outDir, outbox.route, prefix, 'reference', source, 'index.html'),
+              `${targetPath}#${anchor}`,
+              siteUrl,
+            );
+          }
+        }
+      }
+      // Real HTTP redirects are configured on Vercel. These fallbacks also work
+      // on ordinary static hosting, retaining query strings and fragment links.
+      // Snapshot real output before generating fallbacks so aliases cannot be
+      // recursively copied into themselves or into a second legacy namespace.
+      const originalHtmlFiles = findHtmlFiles(outDir);
+      for (const rule of getLegacyRedirects()) {
+        const source = rule.source.replace(/\/:path(?:\*|\(\.\*\))$/, '');
+        const target = rule.destination.replace(/\/:path\*?$/, '');
+        const targetDir = path.join(outDir, target);
+        const product = products.find((item) => target === `/${item.route}`);
+        for (const file of originalHtmlFiles) {
+          const relative = path.relative(targetDir, file);
+          if (relative.startsWith('..') || path.isAbsolute(relative)) continue;
+          // A latest-version alias only exposes that snapshot, not other versions.
+          if (
+            product &&
+            source.endsWith(`/${product.versions[0]}`) &&
+            ['next', ...product.versions.slice(1)].includes(relative.split(path.sep)[0])
+          )
+            continue;
+          const route = relative.replace(/index\.html$/, '').replaceAll(path.sep, '/');
+          const dest = `${target}/${route}`;
+          const output = path.join(outDir, source, relative);
+          if (!fs.existsSync(output)) writeRedirect(output, dest, siteUrl);
+        }
+      }
+      const exclusions = products.flatMap((product) => {
+        const prefixes = ['next/', ...product.versions.slice(1).map((v) => `${v}/`)];
+        return prefixes.map((prefix) => `Disallow: /${product.route}/${prefix}`);
+      });
+      fs.writeFileSync(
+        path.join(outDir, 'robots.txt'),
+        `User-agent: *\nAllow: /\n${exclusions.join('\n')}\nSitemap: ${siteUrl}/sitemap.xml\n`,
+      );
     },
   };
 };
 
-function rewriteVersionCanonicals(docsDir, versionPrefixes, siteUrl, baseUrl, docsPath) {
-  for (const prefix of versionPrefixes) {
-    const versionDir = path.join(docsDir, prefix);
-    if (!fs.existsSync(versionDir)) continue;
-
-    for (const filePath of findHtmlFiles(versionDir)) {
-      const html = fs.readFileSync(filePath, 'utf-8');
-      const versionRoot = `${siteUrl}${baseUrl}${docsPath}/${prefix}/`;
-      const latestRoot = `${siteUrl}${baseUrl}${docsPath}/`;
-      const canonicalRegex = new RegExp(
-        `(<link[^>]*rel="canonical"[^>]*href=")${escapeRegExp(versionRoot)}([^"]*")`
-      );
-      const nextHtml = html.replace(canonicalRegex, `$1${latestRoot}$2`);
-
-      if (nextHtml !== html) {
-        fs.writeFileSync(filePath, nextHtml, 'utf-8');
-      }
-    }
-  }
-}
-
-function createLegacyDocumentationRedirects(docsDir, outDir, siteUrl, baseUrl, docsPath) {
-  if (!fs.existsSync(docsDir)) return;
-
-  for (const sourceFile of findHtmlFiles(docsDir)) {
-    const relativePath = path.relative(docsDir, sourceFile);
-
-    // /outbox/ is the product page in the new information architecture.
-    if (relativePath === 'index.html') continue;
-
-    const redirectFile = path.join(outDir, 'outbox', relativePath);
-    const routePath = relativePath.replace(/index\.html$/, '').replace(/\\/g, '/');
-    const targetPath = `${baseUrl}${docsPath}/${routePath}`;
-    const canonicalUrl = new URL(targetPath, siteUrl).toString();
-
-    fs.mkdirSync(path.dirname(redirectFile), {recursive: true});
-    fs.writeFileSync(
-      redirectFile,
-      [
-        '<!doctype html>',
-        '<html lang="en">',
-        '<head>',
-        '<meta charset="utf-8">',
-        '<meta name="robots" content="noindex">',
-        `<link rel="canonical" href="${canonicalUrl}">`,
-        `<meta http-equiv="refresh" content="0; url=${targetPath}">`,
-        '<title>Documentation moved</title>',
-        '</head>',
-        '<body>',
-        `<p>This documentation moved to <a href="${targetPath}">${targetPath}</a>.</p>`,
-        `<script>location.replace(${JSON.stringify(targetPath)} + location.search + location.hash);</script>`,
-        '</body>',
-        '</html>',
-      ].join('\n'),
-      'utf-8'
-    );
-  }
-}
-
-function createMergedReferenceRedirects(
-  outDir,
-  builtVersions,
-  siteUrl,
-  baseUrl,
-  docsPath
-) {
-  const redirects = [
-    {
-      source: 'mongodb-schema',
-      target: 'database',
-      anchor: 'mongodb-schema',
-      sinceVersion: '1.5.x',
-    },
-    {
-      source: 'rabbitmq',
-      target: 'messaging',
-      anchor: 'rabbitmq-integration',
-      sinceVersion: '1.7.x',
-    },
-  ];
-
-  for (const {version, prefix} of builtVersions) {
-    for (const redirect of redirects) {
-      if (!isVersionAtLeast(version, redirect.sinceVersion)) continue;
-
-      const versionPath = prefix ? `${prefix}/` : '';
-      const targetFile = path.join(
-        outDir,
-        docsPath,
-        prefix,
-        'reference',
-        redirect.target,
-        'index.html'
-      );
-      if (!fs.existsSync(targetFile)) continue;
-
-      const targetPage = `${baseUrl}${docsPath}/${versionPath}reference/${redirect.target}/`;
-      const targetPath = `${targetPage}#${redirect.anchor}`;
-      const docsRedirectFile = path.join(
-        outDir,
-        docsPath,
-        prefix,
-        'reference',
-        redirect.source,
-        'index.html'
-      );
-      const outboxRedirectFile = path.join(
-        outDir,
-        'outbox',
-        prefix,
-        'reference',
-        redirect.source,
-        'index.html'
-      );
-
-      writeStaticRedirect(docsRedirectFile, targetPage, targetPath, siteUrl);
-      writeStaticRedirect(outboxRedirectFile, targetPage, targetPath, siteUrl);
-    }
-  }
-}
-
-function writeStaticRedirect(filePath, targetPage, targetPath, siteUrl) {
-  const canonicalUrl = new URL(targetPage, siteUrl).toString();
-
-  fs.mkdirSync(path.dirname(filePath), {recursive: true});
-  fs.writeFileSync(
-    filePath,
-    [
-      '<!doctype html>',
-      '<html lang="en">',
-      '<head>',
-      '<meta charset="utf-8">',
-      '<meta name="robots" content="noindex">',
-      `<link rel="canonical" href="${canonicalUrl}">`,
-      `<meta http-equiv="refresh" content="0; url=${targetPath}">`,
-      '<title>Documentation moved</title>',
-      '</head>',
-      '<body>',
-      `<p>This documentation moved to <a href="${targetPath}">${targetPath}</a>.</p>`,
-      `<script>const target=new URL(${JSON.stringify(targetPath)},location.origin);target.search=location.search;location.replace(target.toString());</script>`,
-      '</body>',
-      '</html>',
-    ].join('\n'),
-    'utf-8'
-  );
-}
-
-function isVersionAtLeast(version, minimumVersion) {
-  if (version === 'next') return true;
-
-  const parse = (value) => value.split('.').map((part) => Number.parseInt(part, 10) || 0);
-  const current = parse(version);
-  const minimum = parse(minimumVersion);
-
-  for (let index = 0; index < Math.max(current.length, minimum.length); index += 1) {
-    const currentPart = current[index] || 0;
-    const minimumPart = minimum[index] || 0;
-    if (currentPart !== minimumPart) return currentPart > minimumPart;
-  }
-
-  return true;
-}
-
-function writeRobotsTxt(outDir, versionPrefixes, siteUrl, baseUrl, docsPath) {
-  const disallowRules = versionPrefixes
-    .map((prefix) => `Disallow: ${baseUrl}${docsPath}/${prefix}/`)
-    .join('\n');
-
-  const robotsTxt = [
-    'User-agent: *',
-    '',
-    `Allow: ${baseUrl}`,
-    '',
-    '# Block old and unreleased versioned docs',
-    disallowRules,
-    '',
-    `Sitemap: ${siteUrl}${baseUrl}sitemap.xml`,
-    '',
-  ].join('\n');
-
-  fs.writeFileSync(path.join(outDir, 'robots.txt'), robotsTxt, 'utf-8');
-}
-
 function findHtmlFiles(dir) {
-  const results = [];
-  for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      results.push(...findHtmlFiles(fullPath));
-    } else if (entry.name.endsWith('.html')) {
-      results.push(fullPath);
-    }
-  }
-  return results;
+  if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) return [];
+  return fs
+    .readdirSync(dir, {withFileTypes: true})
+    .flatMap((entry) =>
+      entry.isDirectory()
+        ? findHtmlFiles(path.join(dir, entry.name))
+        : entry.name.endsWith('.html')
+          ? [path.join(dir, entry.name)]
+          : [],
+    );
 }
-
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+function writeRedirect(file, target, siteUrl) {
+  fs.mkdirSync(path.dirname(file), {recursive: true});
+  fs.writeFileSync(
+    file,
+    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="${siteUrl}${target.split('#')[0]}"><meta http-equiv="refresh" content="0; url=${target}"><title>Documentation moved</title></head><body><a href="${target}">Documentation moved</a><script>const target=new URL(${JSON.stringify(target)},location.origin);target.search=location.search;if(!target.hash)target.hash=location.hash;location.replace(target.toString());</script></body></html>`,
+  );
 }
