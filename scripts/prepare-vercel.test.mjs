@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
+import metadata from '../site-products.cjs';
 import {withLegacyRedirects} from './prepare-vercel.mjs';
 
 const {redirects} = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
@@ -42,11 +43,11 @@ test('legacy docs redirect before static fallback pages; product page remains av
 });
 
 test('archived and latest legacy URLs retain separate targets and redirect permanence', () => {
-  assert.deepEqual(redirect('/outbox/1.10.x/quickstart/'), {
+  assert.deepEqual(redirect(`/outbox/${metadata.outboxVersions[1]}/quickstart/`), {
     status: 308,
-    location: '/docs/outbox/1.10.x/quickstart/',
+    location: `/docs/outbox/${metadata.outboxVersions[1]}/quickstart/`,
   });
-  assert.deepEqual(redirect('/outbox/1.11.x/quickstart/'), {
+  assert.deepEqual(redirect(`/outbox/${metadata.outboxVersions[0]}/quickstart/`), {
     status: 307,
     location: '/docs/outbox/quickstart/',
   });

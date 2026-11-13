@@ -36,12 +36,12 @@ for (const product of metadata.products) {
 const navbar = (html) => html.match(/<nav\b[\s\S]*?<\/nav>/)?.[0] ?? '';
 const onceNav = navbar(read('docs/once/quickstart'));
 const outboxNav = navbar(read('docs/outbox/quickstart'));
-assert.ok(onceNav.includes('0.1.x Preview'), 'Once dropdown must show its preview version');
+assert.ok(onceNav.includes(`${metadata.onceVersions[0]} Preview`), 'Once dropdown must show its preview version');
 assert.ok(!onceNav.includes('/docs/outbox/1.10.x/'), 'Outbox versions leaked into Once dropdown');
 assert.ok(outboxNav.includes('/docs/outbox/1.10.x/'), 'Outbox archive version missing');
-assert.ok(!outboxNav.includes('0.1.x Preview'), 'Once version leaked into Outbox dropdown');
+assert.ok(!outboxNav.includes('/docs/once/next/'), 'Once version leaked into Outbox dropdown');
 assert.ok(
-  !navbar(read('')).includes('0.1.x Preview'),
+  !navbar(read('')).includes(`${metadata.onceVersions[0]} Preview`),
   'Homepage must not show a docs version selector',
 );
 for (const [source, target] of [
@@ -54,7 +54,7 @@ for (const [source, target] of [
   assert.ok(read(source).includes(`url=${target}`), `Static fallback missing for ${source}`);
 }
 const once = read('docs/once/quickstart');
-assert.ok(once.includes('0.1.0-SNAPSHOT') && once.includes('Preview documentation'));
+assert.ok(once.includes('namastack-once-bom') && once.includes('Preview documentation'));
 assert.ok(read('docs/outbox/next/migrations').includes('Migrations'));
 assert.ok(existsSync('build/videos/namastack-once-v1.en.vtt'));
 assert.ok(readFileSync('build/robots.txt', 'utf8').includes('Disallow: /docs/once/'));
@@ -65,10 +65,9 @@ assert.ok(
 const data = JSON.parse(readFileSync('.docusaurus/globalData.json', 'utf8'))[
   'docusaurus-plugin-content-docs'
 ];
-assert.ok(data.default.versions.some((version) => version.name === '1.11.x'));
-assert.ok(data.once.versions.some((version) => version.name === '0.1.x'));
-assert.ok(!data.default.versions.some((version) => version.name === '0.1.x'));
-assert.ok(!data.once.versions.some((version) => version.name === '1.11.x'));
+for (const product of metadata.products) {
+  assert.deepEqual(data[product.id].versions.map(version => version.name), ['current', ...product.versions]);
+}
 assert.ok(
   readdirSync('build').some((name) => name.startsWith('search-index')),
   'Search indexes missing',
