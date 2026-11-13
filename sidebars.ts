@@ -73,6 +73,18 @@ const sidebars: SidebarsConfig = {
         'reference/configuration',
       ],
     },
+    {
+      type: 'category',
+      label: 'Migrations',
+      collapsed: false,
+      link: {
+        type: 'generated-index',
+        title: 'Migrations',
+        description: 'Upgrade an existing Namastack Outbox application while preserving its records and delivery state.',
+        slug: '/migrations',
+      },
+      items: ['migrations/2-0-0'],
+    },
   ],
 };
 
