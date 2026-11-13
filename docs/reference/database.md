@@ -211,7 +211,9 @@ indexes are created, avoiding potential performance impacts during application s
 
 ## Completion Batching
 
-Completion batching groups successful record updates or deletions into fewer database writes.
+Completion batching groups processing-state updates and successful record deletions into fewer database writes.
+Updates include successful completion, retry scheduling, and permanent failure. A mixed batch is split
+into update and delete groups, which are written in separate transactions.
 It is disabled by default and currently supported with JDBC persistence.
 
 ```yaml
@@ -228,6 +230,8 @@ namastack:
 long a writer waits to fill a batch after receiving its first completion.
 `writer-count` controls how many batches can be written concurrently. A full batch
 is written immediately, without waiting for `max-wait` to expire.
+Only one writer collects a batch at a time. Once collection finishes, another writer
+can collect the next batch while the previous batch is being written to the database.
 
 Batching is most useful when records from many different keys complete concurrently
 and completion writes are a database bottleneck. At low traffic, a completion may
@@ -236,5 +240,53 @@ without reducing database writes. A workload concentrated on a single key also g
 little, because records for that key are processed sequentially. Leave batching
 disabled unless your workload benefits from combining concurrent completion writes.
 
-Processing waits for a completion write to commit before continuing with the next
-record for the same key. Pending completions are drained during shutdown.
+Processing waits for each write to commit before continuing with the next record for the same key.
+Each active processing task has at most one outstanding write, so the shared queue needs no separate
+capacity setting. Pending writes are drained during shutdown.
+
+### Custom JDBC configuration
+
+The JDBC repositories and automatic completion writer share the named `outboxJdbcTemplate`
+(`NamedParameterJdbcTemplate`), `outboxTransactionTemplate`, and configured `JdbcTableNameResolver`.
+By default, the template uses the application `DataSource`. Providing your own `outboxJdbcTemplate`
+configures all default repositories and the completion writer together, including SQL dialect
+detection. A separate writer bean is not needed.
+
+For example, an application with an `outboxDataSource` and a matching `outboxTransactionManager`
+can configure both persistence paths as follows:
+
+```kotlin
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.support.TransactionTemplate
+import javax.sql.DataSource
+
+@Configuration(proxyBeanMethods = false)
+class OutboxJdbcConfiguration {
+    @Bean("outboxJdbcTemplate", autowireCandidate = false)
+    fun outboxJdbcTemplate(
+        @Qualifier("outboxDataSource") dataSource: DataSource,
+    ): NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(dataSource)
+
+    @Bean("outboxTransactionTemplate", autowireCandidate = false)
+    fun outboxTransactionTemplate(
+        @Qualifier("outboxTransactionManager") transactionManager: PlatformTransactionManager,
+    ): TransactionTemplate = TransactionTemplate(transactionManager)
+}
+```
+
+For a separate outbox datasource, disable automatic schema initialization with
+`namastack.outbox.jdbc.schema-initialization.enabled=false` and create the outbox tables in that
+database yourself. Automatic schema initialization uses the application's injected `DataSource`;
+it does not follow the custom JDBC template.
+
+The transaction template must manage the datasource used by `outboxJdbcTemplate`. Its timeout,
+isolation, and propagation settings apply to both repositories and completion writes. Successful
+completion writes must commit before returning. Custom resource wiring is not validated.
+
+You can still replace individual repository beans or provide an `OutboxCompletionWriter` bean.
+Such replacements are responsible for using compatible datasources, transactions, and table names.
+Enable `namastack.outbox.completion-batching.enabled` to use the completion writer.
