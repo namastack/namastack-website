@@ -40,7 +40,7 @@ Use the actual new `major.minor.x` line. The first entry in `versions.json` beco
 
 ## Vercel deployment
 
-The Website workflow deploys successful `main` builds when the repository variable `VERCEL_DEPLOY_ENABLED` is `true`. Pull requests never receive deployment credentials or deploy to production. Deployment can also be started manually with **Run workflow** on `main`.
+The Website workflow deploys successful `main` builds when the repository variable `VERCEL_DEPLOY_ENABLED` is `true`. Pull request Actions jobs only validate the site; Vercel's Git integration builds and publishes their preview deployments. Deployment to production can also be started manually with **Run workflow** on `main`.
 
 Configure these GitHub Actions repository secrets:
 
@@ -52,7 +52,17 @@ Keep `VERCEL_DEPLOY_ENABLED` unset until the project and credentials are configu
 
 ### Production project
 
-Deployments reuse the existing Vercel project named `namastack-outbox`, preserving www.namastack.io and its existing domain configuration. The old Outbox Git integration is disconnected; this repository's Website workflow owns deployments.
+Deployments reuse the existing Vercel project named `namastack-outbox`, preserving www.namastack.io and its existing domain configuration. Its Git integration connects to `namastack/namastack-website` for previews; this repository's Website workflow owns production deployments.
+
+### Pull request previews
+
+Vercel builds non-production branches and posts the preview URL on their pull requests. New pushes update the preview automatically. Fork previews may require approval in Vercel.
+
+`vercel.json` disables automatic Git deployments for `main` with `git.deploymentEnabled.main: false`. Other branches remain enabled by default. This keeps production deployment in the Website workflow after validation succeeds.
+
+To reconnect the integration, first ensure that configuration is on `main`, then select `namastack/namastack-website` in the existing Vercel project's **Settings → Git**. The Vercel GitHub app must have access to this repository. Keep the production branch set to `main` and PR deployment comments enabled.
+
+### Project settings
 
 Project settings:
 
