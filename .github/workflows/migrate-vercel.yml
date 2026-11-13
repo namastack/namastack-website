@@ -1,0 +1,56 @@
+name: Migrate existing Vercel project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Verify production project and prepare local CLI link
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          from pathlib import Path
+          project_id = os.environ['VERCEL_PROJECT_ID']
+          team_id = os.environ['VERCEL_ORG_ID']
+          def get(path):
+              request = urllib.request.Request('https://api.vercel.com' + path + '?teamId=' + team_id, headers={'Authorization': 'Bearer ' + os.environ['VERCEL_TOKEN']})
+              with urllib.request.urlopen(request) as response:
+                  return json.load(response)
+          project = get('/v9/projects/' + project_id)
+          assert project['name'] == 'namastack-outbox', 'Unexpected project name'
+          assert project['accountId'] == team_id, 'Unexpected account'
+          domains = get('/v9/projects/' + project_id + '/domains')
+          assert any(domain['name'] == 'www.namastack.io' for domain in domains['domains']), 'Production domain missing'
+          Path('.vercel').mkdir(exist_ok=True)
+          Path('.vercel/project.json').write_text(json.dumps({'orgId': team_id, 'projectId': project_id}))
+          print('Verified existing project and www.namastack.io; domains and deployments are retained.')
+          PY
+      - name: Disconnect the old Outbox Git integration
+        run: npx --yes vercel@65.15.0 git disconnect --yes --token="$VERCEL_TOKEN"
+      - name: Configure repository root and Node.js 22
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = 'https://api.vercel.com/v9/projects/' + os.environ['VERCEL_PROJECT_ID'] + '?teamId=' + os.environ['VERCEL_ORG_ID']
+          settings = {'rootDirectory': None, 'nodeVersion': '22.x', 'buildCommand': 'npm run build', 'installCommand': 'npm ci', 'outputDirectory': 'build'}
+          request = urllib.request.Request(url, method='PATCH', data=json.dumps(settings).encode(), headers={'Authorization': 'Bearer ' + os.environ['VERCEL_TOKEN'], 'Content-Type': 'application/json'})
+          with urllib.request.urlopen(request) as response:
+              project = json.load(response)
+          assert project['rootDirectory'] is None
+          assert not project.get('link'), 'Old Git integration is still connected'
+          print('Existing production project configured for independent website deployments.')
+          PY
