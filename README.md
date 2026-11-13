@@ -15,28 +15,52 @@ npm start
 npm run typecheck
 npm test
 npm run build
+npm run verify:site
 npm run serve
 ```
 
 The production build is written to `build/`. Pull requests and pushes to `main` run the Website workflow to typecheck and build the site.
 
-## Content and versions
+## Products, documentation and independent versions
 
-- `src/pages/`: homepage, product page and documentation landing page.
-- `docs/`: development documentation, published under `/docs/next/`.
-- `versioned_docs/`: published Outbox documentation snapshots.
-- `versioned_sidebars/` and `versions.json`: navigation and version history.
-- `static/`: images, videos and other public assets.
+Public routes:
 
-Correct released documentation in its `versioned_docs/version-<line>/` directory. Update `docs/` too if the correction applies to development. Deploying the website does not create a documentation version.
+- `/`: shared Namastack homepage.
+- `/outbox/` and `/once/`: product pages.
+- `/docs/`: product documentation chooser.
+- `/docs/outbox/`: latest Outbox release-line documentation; `/docs/outbox/next/` is development.
+- `/docs/once/`: the `0.1.x Preview` documentation snapshot; `/docs/once/next/` is development.
 
-To create a new Outbox documentation line independently of a library release:
+Each product is a separate Docusaurus docs instance. Outbox retains the default instance so its existing version history and CLI remain compatible. Once uses plugin ID `once`.
+
+| Content | Outbox | Once |
+|---|---|---|
+| Development source | `docs/` | `docs-once/` |
+| Versions | `versions.json` | `once_versions.json` |
+| Published snapshots | `versioned_docs/` | `once_versioned_docs/` |
+| Versioned sidebars | `versioned_sidebars/` | `once_versioned_sidebars/` |
+| Development sidebar | `sidebars.ts` | `sidebarsOnce.ts` |
+
+Correct a published snapshot in its product's versioned directory and update development docs where appropriate. Deploying the site never creates a documentation snapshot.
+
+Create an independent new release-line snapshot with one of these commands:
 
 ```sh
-npm run docusaurus -- docs:version 1.12.x
+npm run docs:version:outbox -- 2.0.x
+npm run docs:version:once -- 0.2.x
 ```
 
-Use the actual new `major.minor.x` line. The first entry in `versions.json` becomes the stable documentation under `/docs/`; earlier lines retain `/docs/<line>/`. In `vercel.json`, update the legacy `/outbox/<line>/:path*` redirects: the new latest line targets `/docs/:path*` temporarily, and the previous line targets `/docs/<previous-line>/:path*` permanently. Review, build and commit the snapshot, sidebar, version list and redirects together. No release workflow in the library repository modifies this repository.
+Use the actual new documentation line. The wrapper invokes Docusaurus for that product only, then synchronizes `vercel.json` redirects with the version catalog. Commit the snapshot, version list, sidebar and any redirect changes together. The first version in each catalog is served at the product's docs root; older versions keep their version in the URL.
+
+Once is not published as a stable library yet. Its `0.1.x` snapshot is explicitly labeled Preview and uses `0.1.0-SNAPSHOT` examples, with local-source instructions. When publishing its first stable documentation, update the preview labels/banner, artifact coordinates, sitemap exclusion and robots rules together. No library release workflow changes these docs automatically.
+
+The navbar displays only the active product's version selector. Search selects the matching product context and offers both projects globally. Shared sponsorship, contributor and legal pages live outside product versioning.
+
+### Existing links
+
+Former `/docs/quickstart/`, `/docs/reference/`, `/docs/<version>/...` and earlier `/outbox/...` documentation URLs redirect to their corresponding Outbox destinations. `/docs/` remains the shared entry point and `/outbox/` remains the product page. Shared-page links redirect to `/sponsor/`, `/contributing/` and `/legal-notice/`.
+
+`site-products.cjs` owns the legacy route catalog. `npm run sync:redirects` regenerates HTTP redirects; the build plugin emits matching static-host fallbacks. Queries and fragments are preserved. `npm test` checks HTTP routing, and `npm run verify:site` checks generated pages, independent version menus, archives and static redirects after a build.
 
 ## Vercel deployment
 
@@ -74,11 +98,15 @@ Project settings:
 
 The workflow pulls project settings, builds with the pinned Vercel CLI, adds the legacy HTTP redirects from `vercel.json` before filesystem routes, and deploys the prebuilt output. Domains and existing deployments remain on the same Vercel project. Keep library publishing/signing and Codecov credentials in the library repository; only the three Vercel secrets belong here.
 
-After a production deployment, verify the homepage, `/outbox/`, `/docs/quickstart/`, archived versions and legacy redirects on www.namastack.io. URLs, documentation versions and public content retain their existing structure.
+After a production deployment, verify the homepage, both product pages, `/docs/`, both documentation areas, archived versions and legacy redirects on www.namastack.io. URLs, documentation versions and public content retain their existing structure.
 
 ## Outbox overview video
 
-The homepage and `/outbox/` embed the showreel through `OutboxShowreel` in `src/components/MarketingPage/index.tsx`. Assets live in `static/videos/`. When replacing a film, update the video, poster and captions together and change versioned URLs to avoid stale caches.
+The homepage and `/outbox/` embed the Outbox showreel through `OutboxShowreel` in `src/components/MarketingPage/index.tsx`. Assets live in `static/videos/`. When replacing a film, update the video, poster and captions together and change versioned URLs to avoid stale caches.
+
+## Once visual identity and showreel
+
+The Once page uses the golden ring from the Once showreel as a native SVG product mark. The supplied poster, MP4 and converted English captions are under `static/videos/namastack-once-v1.*`. Native video controls, `preload="none"` and versioned asset names match the Outbox video. Update the complete asset set together when replacing the film.
 
 ## Origin
 

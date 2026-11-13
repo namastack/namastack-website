@@ -31,7 +31,7 @@ export default function ModulithPromotion(): ReactNode {
                      style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                   <Link
                       className="button button--primary button--lg"
-                      to="/docs/reference/spring-modulith/">
+                      to="/docs/outbox/reference/spring-modulith/">
                     Learn More
                     <IconAppsFilled style={{marginLeft: '0.5rem'}}/>
                   </Link>

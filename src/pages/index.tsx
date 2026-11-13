@@ -1,7 +1,7 @@
 import React, {type ReactNode} from 'react';
 import Head from '@docusaurus/Head';
 import Layout from '@theme/Layout';
-import {HomeContent} from '@site/src/components/MarketingPage';
+import {ProductHome} from '@site/src/components/Products';
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -17,7 +17,7 @@ export default function Home(): ReactNode {
   return (
     <Layout
       title="Reliable foundations for event-driven systems"
-      description="Namastack builds open-source infrastructure for reliable event-driven systems. Explore Namastack Outbox for transactional event delivery in Spring Boot.">
+      description="Namastack builds open-source infrastructure for reliable event-driven systems. Explore Outbox for transactional event delivery and Once for transactional idempotency in Spring Boot.">
       <Head>
         <link rel="canonical" href="https://www.namastack.io/" />
         <meta property="og:type" content="website" />
@@ -27,7 +27,7 @@ export default function Home(): ReactNode {
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Head>
-      <HomeContent />
+      <ProductHome />
     </Layout>
   );
 }

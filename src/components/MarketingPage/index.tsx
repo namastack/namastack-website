@@ -131,11 +131,11 @@ export function Hero({product = false}: HeroProps) {
               : 'Namastack provides open-source infrastructure for building dependable event-driven applications. Namastack Outbox is the first available project.'}
           </p>
           <div className={styles.actions}>
-            <Link className={styles.primaryButton} to={product ? '/docs/quickstart/' : '/outbox/'}>
+            <Link className={styles.primaryButton} to={product ? '/docs/outbox/quickstart/' : '/outbox/'}>
               {product ? 'Get started' : 'Explore Namastack Outbox'}
               <span aria-hidden="true">→</span>
             </Link>
-            <Link className={styles.secondaryButton} to="/docs/">
+            <Link className={styles.secondaryButton} to="/docs/outbox/">
               Documentation
             </Link>
             <Link className={styles.ghostButton} href={GITHUB_URL}>
@@ -177,7 +177,7 @@ const tenets: Array<{title: string; description: string; label: string; icon: Ic
   },
   {
     title: 'Open source',
-    description: 'The available project is developed in public under the Apache License 2.0.',
+    description: 'The projects are developed in public under the Apache License 2.0.',
     label: 'Apache 2.0',
     icon: IconBrandGithubFilled,
   },
@@ -194,7 +194,7 @@ export function BrandIntro() {
             description={
               <>
                 Namastack is the umbrella brand for open-source infrastructure tools for modern
-                distributed applications. Today, that work is represented by Namastack Outbox.
+                distributed applications. Outbox handles durable event delivery; Once protects local business operations against duplicates.
               </>
             }
           />
@@ -375,7 +375,7 @@ export function IntegrationSection() {
               official starter to externalize events through Namastack&apos;s persistence, processing,
               retry, ordering, and observability model.
             </p>
-            <Link className={styles.secondaryButton} to="/docs/reference/spring-modulith/">
+            <Link className={styles.secondaryButton} to="/docs/outbox/reference/spring-modulith/">
               Read the integration guide
             </Link>
           </div>
@@ -438,7 +438,7 @@ export function CTASection({product = false}: {product?: boolean}) {
             : 'Use Namastack Outbox to close the dual-write gap in your Spring Boot application.'}
         </p>
         <div className={styles.actions}>
-          <Link className={styles.primaryButton} to="/docs/quickstart/">Read the quickstart <span aria-hidden="true">→</span></Link>
+          <Link className={styles.primaryButton} to="/docs/outbox/quickstart/">Read the quickstart <span aria-hidden="true">→</span></Link>
           <Link className={styles.secondaryButton} href={GITHUB_URL}><IconBrandGithubFilled aria-hidden="true" /> Explore on GitHub</Link>
         </div>
       </div>
@@ -453,12 +453,12 @@ export function SponsorSection() {
         <IconHeartFilled aria-hidden="true" />
         <Heading as="h2">Support the work</Heading>
         <p>
-          Namastack Outbox is independently developed and maintained as open-source software.
+          Namastack Outbox and Namastack Once are independently developed and maintained as open-source software.
           Sponsorship supports maintenance, documentation, integrations, and long-term stability.
         </p>
         <div className={styles.actions}>
           <Link className={styles.primaryButton} href={SPONSOR_URL}>Become a sponsor</Link>
-          <Link className={styles.ghostButton} href={GITHUB_URL}>View on GitHub</Link>
+          <Link className={styles.ghostButton} href="https://github.com/namastack">View on GitHub</Link>
         </div>
       </div>
     </section>
@@ -502,7 +502,7 @@ export function ProductDetails() {
             <Heading as="h3">Understand the delivery contract</Heading>
             <p>At-least-once delivery can produce duplicates. The guarantees guide explains ordering, retries, transactions, and consumer responsibilities.</p>
           </div>
-          <Link to="/docs/reference/guarantees/">Read guarantees →</Link>
+          <Link to="/docs/outbox/reference/guarantees/">Read guarantees →</Link>
         </div>
       </div>
     </section>

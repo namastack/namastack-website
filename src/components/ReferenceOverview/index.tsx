@@ -207,7 +207,7 @@ function ReferenceGroupCard({
 }
 
 export default function ReferenceOverview(): ReactNode {
-  const activeVersion = useActiveVersion(undefined);
+  const activeVersion = useActiveVersion('default');
   const rawVersionName = activeVersion?.name;
   const currentVersion =
     rawVersionName === 'current' || !rawVersionName ? 'next' : rawVersionName;

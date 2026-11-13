@@ -81,7 +81,7 @@ for schema requirements and compatibility between workers during a rolling deplo
 
 Follow the documented rollout sequence before enabling features that write data older workers
 cannot interpret. A rollback can require additional steps once new records have been persisted.
-See [Rolling Deployments](/docs/reference/rolling-deployments/) for the deployment approach.
+See [Rolling Deployments](/docs/outbox/reference/rolling-deployments/) for the deployment approach.
 
 ## Deprecation and Migration Guidance
 
@@ -90,7 +90,7 @@ a path to migrate. The timing depends on the impact and maintenance cost of the 
 define a fixed minimum deprecation period.
 
 For compatibility changes, release notes describe who is affected and what action is needed.
-Larger migrations have dedicated [migration guides](/docs/next/migrations/). Consult the
+Larger migrations have dedicated [migration guides](/docs/outbox/next/migrations/). Consult the
 [GitHub releases](https://github.com/namastack/namastack-outbox/releases) for each release between
 your current and target versions.
 

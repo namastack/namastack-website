@@ -1,0 +1,30 @@
+import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+const sidebars: SidebarsConfig = {
+  onceSidebar: [
+    'overview',
+    'quickstart',
+    {
+      type: 'category',
+      label: 'Core concepts',
+      items: ['concepts/identity', 'concepts/transactions'],
+    },
+    {
+      type: 'category',
+      label: 'Using Once',
+      items: ['usage/annotations', 'usage/programmatic', 'usage/integrations'],
+    },
+    {
+      type: 'category',
+      label: 'Persistence',
+      items: ['persistence/jdbc', 'persistence/mongodb', 'persistence/multiple-instances'],
+    },
+    {
+      type: 'category',
+      label: 'Operations',
+      items: ['operations/retention', 'operations/observability'],
+    },
+    'configuration',
+    'examples',
+  ],
+};
+export default sidebars;

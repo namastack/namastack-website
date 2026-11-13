@@ -1,0 +1,35 @@
+.products {
+  display: flex;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--ns-border-subtle);
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.75rem;
+}
+.products a {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  color: var(--ns-text-muted);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+.products a.active {
+  color: var(--ns-accent);
+  background: color-mix(in srgb, var(--ns-accent) 9%, transparent);
+}
+.circle {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid var(--ns-accent);
+  border-radius: 50%;
+}
+.preview {
+  padding: 0.65rem 0.9rem;
+  margin-bottom: 1.4rem;
+  border-left: 2px solid var(--ns-accent);
+  background: var(--ns-surface-raised);
+  color: var(--ns-text-muted);
+  font-size: 0.8rem;
+}
