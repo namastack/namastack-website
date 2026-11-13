@@ -28,7 +28,7 @@
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^19.3.1",
     "vanilla-cookieconsent": "^3.3.0"
   },
   "devDependencies": {
