@@ -49,16 +49,21 @@ Configure these GitHub Actions repository secrets:
 
 Keep `VERCEL_DEPLOY_ENABLED` unset until the project and credentials are configured. Existing production traffic is unaffected while deployment is disabled.
 
-### Initial migration from the Outbox repository
+### Production project
 
-1. Reuse the existing Vercel project to retain its domains and production configuration.
-2. Change its Root Directory from `namastack-outbox-docs` to the repository root (empty). The build command is `npm run build`, install command is `npm ci`, output directory is `build`, and Node.js version is 22.x.
-3. Disconnect the old Outbox Git integration. This repository uses GitHub Actions for deployment, so no Vercel Git connection is needed; do not leave the old connection active with the changed root directory.
-4. Configure the three secrets above in this repository, then set `VERCEL_DEPLOY_ENABLED=true` and run the Website workflow on `main`.
-5. Verify the homepage, `/outbox/`, `/docs/quickstart/`, archived versions and legacy redirects on www.namastack.io.
-6. After production verification, merge the Outbox extraction PR and remove the three obsolete Vercel secrets from Outbox. Keep Codecov and all library publishing/signing credentials there.
+Deployments reuse the existing Vercel project named `namastack-outbox`, preserving www.namastack.io and its existing domain configuration. The old Outbox Git integration is disconnected; this repository's Website workflow owns deployments.
 
-The Vercel project-settings change and Git disconnection must be performed together before deployment is enabled. URLs, documentation versions, redirects and public content retain their existing structure during this migration.
+Project settings:
+
+- Root Directory: repository root (empty).
+- Node.js: 22.x.
+- Install Command: `npm ci`.
+- Build Command: `npm run build`.
+- Output Directory: `build`.
+
+The workflow pulls project settings, builds with the pinned Vercel CLI, and deploys the prebuilt output. Domains and existing deployments remain on the same Vercel project. Keep library publishing/signing and Codecov credentials in the library repository; only the three Vercel secrets belong here.
+
+After a production deployment, verify the homepage, `/outbox/`, `/docs/quickstart/`, archived versions and legacy redirects on www.namastack.io. URLs, documentation versions and public content retain their existing structure.
 
 ## Outbox overview video
 
