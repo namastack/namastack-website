@@ -563,22 +563,25 @@ public class OrderHandlers {
 
 ### OutboxFailureContext
 
-`OutboxFailureContext` is a Kotlin data class supplied to fallback handlers:
+`OutboxFailureContext` is a Kotlin data class supplied to fallback handlers. The
+tabs show its Kotlin declaration and the corresponding Java API signatures
+(constructor, generated data-class methods and method bodies omitted):
 
 <Tabs>
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
 data class OutboxFailureContext(
-    val recordId: String,
-    val recordKey: String,
-    val createdAt: Instant,
-    val failureCount: Int,
-    val lastFailure: Throwable?,
-    val handlerId: String,
-    val retriesExhausted: Boolean,
-    val nonRetryableException: Boolean,
-    val context: Map<String, String>,
+    val recordId: String,               // Unique identifier of the record
+    val recordKey: String,              // Business key
+    val createdAt: Instant,             // When the record was created
+    val failureCount: Int,              // Number of failed attempts
+    val lastFailure: Throwable?,        // Last exception thrown; may be null
+    val handlerId: String,              // Handler that failed
+    val retriesExhausted: Boolean,      // True if the retry limit was reached
+    val nonRetryableException: Boolean, // True for a non-retryable exception
+    val context: Map<String, String>,   // Propagated context (traceId, tenantId, etc.)
+    // Processing group of this delivery (since 2.0.0)
     val processingGroup: String = OutboxProcessingGroup.DEFAULT,
 )
 ```
@@ -587,17 +590,18 @@ data class OutboxFailureContext(
 <TabItem value="java" label="Java">
 
 ```java
-// Accessors on the supplied context:
-String handlerId = context.getHandlerId();
-String recordId = context.getRecordId();
-String recordKey = context.getRecordKey();
-String processingGroup = context.getProcessingGroup();
-Instant createdAt = context.getCreatedAt();
-int failureCount = context.getFailureCount();
-Throwable lastFailure = context.getLastFailure(); // May be null
-boolean retriesExhausted = context.getRetriesExhausted();
-boolean nonRetryableException = context.getNonRetryableException();
-Map<String, String> propagatedContext = context.getContext();
+public final class OutboxFailureContext {
+    public String getRecordId();               // Unique identifier of the record
+    public String getRecordKey();              // Business key
+    public Instant getCreatedAt();             // When the record was created
+    public int getFailureCount();              // Number of failed attempts
+    public Throwable getLastFailure();         // Last exception thrown; may be null
+    public String getHandlerId();              // Handler that failed
+    public boolean getRetriesExhausted();      // True if the retry limit was reached
+    public boolean getNonRetryableException(); // True for a non-retryable exception
+    public Map<String, String> getContext();   // Propagated context (traceId, tenantId, etc.)
+    public String getProcessingGroup();        // Processing group (since 2.0.0)
+}
 ```
 
 </TabItem>
