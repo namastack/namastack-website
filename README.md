@@ -13,6 +13,7 @@ npm start
 
 ```sh
 npm run typecheck
+npm test
 npm run build
 npm run serve
 ```
@@ -61,7 +62,7 @@ Project settings:
 - Build Command: `npm run build`.
 - Output Directory: `build`.
 
-The workflow pulls project settings, builds with the pinned Vercel CLI, and deploys the prebuilt output. Domains and existing deployments remain on the same Vercel project. Keep library publishing/signing and Codecov credentials in the library repository; only the three Vercel secrets belong here.
+The workflow pulls project settings, builds with the pinned Vercel CLI, adds the legacy HTTP redirects from `vercel.json` before filesystem routes, and deploys the prebuilt output. Domains and existing deployments remain on the same Vercel project. Keep library publishing/signing and Codecov credentials in the library repository; only the three Vercel secrets belong here.
 
 After a production deployment, verify the homepage, `/outbox/`, `/docs/quickstart/`, archived versions and legacy redirects on www.namastack.io. URLs, documentation versions and public content retain their existing structure.
 

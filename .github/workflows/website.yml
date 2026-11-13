@@ -25,6 +25,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      - run: npm test
       - run: npm run build
       - uses: actions/upload-artifact@v7
         with:
@@ -58,9 +59,11 @@ jobs:
         run: npx --yes vercel@65.15.0 pull --yes --environment=production --token="$VERCEL_TOKEN"
       - name: Build for Vercel
         run: npx --yes vercel@65.15.0 build --prod --token="$VERCEL_TOKEN"
+      - name: Preserve legacy HTTP redirects in prebuilt output
+        run: npm run prepare:vercel
       - name: Deploy to production
         id: deploy
         run: |
-          url="$(npx --yes vercel@65.15.0 deploy --prebuilt --prod --token="$VERCEL_TOKEN")"
+          url="$(npx --yes vercel@65.15.0 deploy --prebuilt --archive=tgz --prod --token="$VERCEL_TOKEN")"
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Website deployed: $url" >> "$GITHUB_STEP_SUMMARY"

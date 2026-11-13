@@ -12,7 +12,9 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "prepare:vercel": "node scripts/prepare-vercel.mjs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.10.2",
@@ -33,6 +35,7 @@
     "@docusaurus/module-type-aliases": "^3.10.1",
     "@docusaurus/tsconfig": "^3.10.1",
     "@docusaurus/types": "^3.10.1",
+    "@vercel/routing-utils": "6.6.1",
     "typescript": "~5.6.2"
   },
   "overrides": {
