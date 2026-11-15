@@ -1,9 +1,10 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import versions from './versions.json';
+import versions from './outbox_versions.json';
+import onceVersions from './once_versions.json';
 
-// First entry in versions.json is the latest stable version
+// First entry in outbox_versions.json is the latest stable version
 const latestVersion = versions[0];
 const olderVersions = versions.slice(1);
 
@@ -18,9 +19,11 @@ for (const v of olderVersions) {
 
 // Sitemap ignore patterns: exclude old versions, "next", and low-value pages
 const sitemapIgnorePatterns = [
-  '/docs/next/**',
-  '/docs/legal-notice/**',
-  ...olderVersions.map((v) => `/docs/${v}/**`),
+  '/outbox/next/**',
+  '/legal-notice/**',
+  '/once/next/**',
+  ...onceVersions.slice(1).map((v) => `/once/${v}/**`),
+  ...olderVersions.map((v) => `/outbox/${v}/**`),
 ];
 
 const config: Config = {
@@ -46,7 +49,8 @@ const config: Config = {
   organizationName: 'namastack', // Usually your GitHub org/user name.
   projectName: 'namastack-website', // Usually your repo name.
 
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenAnchors: 'throw',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -67,8 +71,10 @@ const config: Config = {
       {
         blog: false,
         docs: {
-          routeBasePath: '/docs',
-          sidebarPath: './sidebars.ts',
+          id: 'outbox',
+          path: 'docs-outbox',
+          routeBasePath: '/outbox',
+          sidebarPath: './sidebarsOutbox.ts',
           lastVersion: latestVersion,
           versions: versionConfig,
           editUrl: 'https://github.com/namastack/namastack-website/edit/main/',
@@ -76,10 +82,7 @@ const config: Config = {
         sitemap: {
           changefreq: 'weekly' as const,
           priority: 0.5,
-          ignorePatterns: [
-            ...sitemapIgnorePatterns,
-            '/search/**',
-          ],
+          ignorePatterns: [...sitemapIgnorePatterns, '/search/**'],
           async createSitemapItems({defaultCreateSitemapItems, ...params}) {
             const items = await defaultCreateSitemapItems({...params});
             return items.map((item) => {
@@ -88,6 +91,7 @@ const config: Config = {
               if (
                 pathname === '/' ||
                 pathname === '/outbox/' ||
+                pathname === '/once/' ||
                 pathname === '/docs/' ||
                 pathname.includes('/quickstart/')
               ) {
@@ -107,15 +111,41 @@ const config: Config = {
   plugins: [
     './plugins/canonical-fix-plugin.js',
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'once',
+        path: 'docs-once',
+        routeBasePath: '/once',
+        sidebarPath: './sidebarsOnce.ts',
+        lastVersion: onceVersions[0] ?? 'current',
+        versions: {
+          current: {label: 'Next', path: 'next', noIndex: true},
+          ...Object.fromEntries(
+            onceVersions.map((version) => [version, {label: version, noIndex: version !== onceVersions[0]}]),
+          ),
+        },
+        editUrl: 'https://github.com/namastack/namastack-website/edit/main/',
+      },
+    ],
+    [
       '@easyops-cn/docusaurus-search-local',
       {
         hashed: true,
         language: 'en',
         indexDocs: true,
+        forceIgnoreNoIndex: true, // Next and archived docs remain searchable within the site.
         indexBlog: false,
         indexPages: true,
         highlightSearchTermsOnTargetPage: true,
-        docsRouteBasePath: '/docs',
+        docsRouteBasePath: ['/outbox', '/once'],
+        docsDir: ['docs-outbox', 'docs-once'],
+        docsPluginIdForPreferredVersion: 'outbox',
+        searchContextByPaths: [
+          {path: 'outbox', label: 'Outbox'},
+          {path: 'once', label: 'Once'},
+        ],
+        useAllContextsWithNoSearchContext: true,
+        explicitSearchResultPath: true,
       },
     ],
   ],
@@ -126,7 +156,7 @@ const config: Config = {
       {
         name: 'keywords',
         content:
-          'Namastack, outbox pattern, spring boot, transactional outbox, transactional messaging, ' +
+          'Namastack, outbox pattern, spring boot, transactional outbox, transactional messaging, idempotency, duplicate protection, Namastack Once, ' +
           'distributed systems, event-driven architecture, at-least-once delivery, ' +
           'Java, Kotlin, Spring, microservices, reliable messaging',
       },
@@ -146,58 +176,29 @@ const config: Config = {
         height: 28,
       },
       items: [
-        {to: '/outbox/', label: 'Outbox', position: 'left', activeBaseRegex: '^/outbox/'},
-        {
-          type: 'dropdown',
-          to: '/docs/',
-          label: 'Docs',
-          position: 'left',
-          activeBaseRegex: '^/docs/',
-          items: [
-            {
-              label: 'Quickstart',
-              to: '/docs/quickstart/',
-              activeBaseRegex: '^/docs/(?:[^/]+/)?quickstart/?$',
-            },
-            {
-              label: 'Reference',
-              to: '/docs/reference/',
-              activeBaseRegex: '^/docs/(?:[^/]+/)?reference/?$',
-            },
-            {
-              label: 'Migrations',
-              to: '/docs/next/migrations/',
-              activeBaseRegex: '^/docs/(?:[^/]+/)?migrations(?:/|$)',
-            },
-            {
-              label: 'Spring Modulith',
-              to: '/docs/reference/spring-modulith/',
-              activeBaseRegex: '^/docs/(?:[^/]+/)?reference/spring-modulith/?$',
-            },
-          ],
-        },
+        {label: 'Outbox', to: '/outbox/', position: 'left', activeBaseRegex: '^/outbox/'},
+        {label: 'Once', to: '/once/', position: 'left', activeBaseRegex: '^/once/'},
         {
           label: 'Community',
           position: 'left',
           items: [
-            {label: 'Contributing', to: '/docs/contributing/'},
-            {label: 'Support and Update Policy', to: '/docs/support-and-update-policy/'},
-            {label: 'GitHub Discussions', href: 'https://github.com/namastack/namastack-outbox/discussions'},
-            {label: 'GitHub Issues', href: 'https://github.com/namastack/namastack-outbox/issues'},
+            {label: 'Contributing', to: '/contributing/'},
+            {label: 'Support policy', to: '/support-and-update-policy/'},
+            {label: 'Outbox security policy', to: '/outbox/security-policy/'},
+            {label: 'Once security policy', to: '/once/security-policy/'},
             {label: 'Discord', href: 'https://discord.gg/XNHP5Yhxy7'},
           ],
         },
         {type: 'search', position: 'right'},
-        {to: '/docs/sponsor/', label: 'Sponsor', position: 'right', className: 'navbar__sponsor'},
+        {type: 'custom-productVersion', position: 'right'},
+        {to: '/sponsor/', label: 'Sponsor', position: 'right', className: 'navbar__sponsor'},
         {
-          href: 'https://github.com/namastack/namastack-outbox',
           label: 'GitHub',
           position: 'right',
-          className: 'navbar__github',
-        },
-        {
-          type: 'docsVersionDropdown',
-          position: 'right',
+          items: [
+            {label: 'Namastack Outbox', href: 'https://github.com/namastack/namastack-outbox'},
+            {label: 'Namastack Once', href: 'https://github.com/namastack/namastack-once'},
+          ],
         },
       ],
     },
@@ -205,67 +206,41 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Namastack',
+          title: 'Products',
           items: [
-            {
-              label: 'Home',
-              to: '/',
-            },
-            {
-              label: 'Namastack Outbox',
-              to: '/outbox/',
-            },
+            {label: 'Namastack Outbox', to: '/outbox/'},
+            {label: 'Namastack Once', to: '/once/'},
           ],
         },
         {
           title: 'Documentation',
           items: [
-            {
-              label: 'Getting Started',
-              to: '/docs/quickstart/',
-            },
-            {
-              label: 'Reference',
-              to: '/docs/reference/',
-            },
-            {
-              label: 'Reliability Guarantees',
-              to: '/docs/reference/guarantees/',
-            },
+            {label: 'Outbox quickstart', to: '/outbox/quickstart/'},
+            {label: 'Once quickstart', to: '/once/quickstart/'},
+            {label: 'Outbox migration guides', to: '/outbox/next/migrations/'},
           ],
         },
         {
-          title: 'Community & Support',
+          title: 'Community',
           items: [
+            {label: 'Contributing', to: '/contributing/'},
             {
-              label: 'Support and Update Policy',
-              to: '/docs/support-and-update-policy/',
-            },
-            {
-              label: 'Contributing',
-              to: '/docs/contributing/',
-            },
-            {
-              label: 'GitHub Discussions',
+              label: 'Outbox discussions',
               href: 'https://github.com/namastack/namastack-outbox/discussions',
             },
             {
-              label: 'Discord',
-              href: 'https://discord.gg/XNHP5Yhxy7',
+              label: 'Once discussions',
+              href: 'https://github.com/namastack/namastack-once/discussions',
             },
-            {
-              label: 'Sponsor Namastack',
-              to: '/docs/sponsor/',
-            },
+            {label: 'Discord', href: 'https://discord.gg/XNHP5Yhxy7'},
           ],
         },
         {
-          title: 'Project',
+          title: 'Namastack',
           items: [
-            {label: 'GitHub', href: 'https://github.com/namastack/namastack-outbox'},
-            {label: 'Releases', href: 'https://github.com/namastack/namastack-outbox/releases'},
-            {label: 'Security', href: 'https://github.com/namastack/namastack-outbox/security'},
-            {label: 'Legal Notice', to: '/docs/legal-notice/'},
+            {label: 'Home', to: '/'},
+            {label: 'Sponsor', to: '/sponsor/'},
+            {label: 'Legal notice', to: '/legal-notice/'},
           ],
         },
       ],

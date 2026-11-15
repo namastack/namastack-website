@@ -16,6 +16,7 @@
   --ns-text-dim: #8d887c;
   --ns-accent: #a77d00;
   --ns-accent-hover: #8d6900;
+  --ns-accent-ink: #10100d;
   --ns-code-string: #087a50;
   --ns-code-comment: #777166;
   --ns-status-success: #087a50;
@@ -71,6 +72,36 @@
   --ifm-color-primary-lighter: #ffe17d;
   --ifm-color-primary-lightest: #ffebb0;
   --docusaurus-highlighted-code-line-bg: rgb(255 213 79 / 9%);
+}
+
+html[data-namastack-product='once'],
+[data-product='once'] {
+  --ns-accent: #087f75;
+  --ns-accent-hover: #06685f;
+  --ns-accent-ink: #ffffff;
+  --ifm-color-primary: #087f75;
+  --ifm-color-primary-dark: #077269;
+  --ifm-color-primary-darker: #076c63;
+  --ifm-color-primary-darkest: #065952;
+  --ifm-color-primary-light: #098c81;
+  --ifm-color-primary-lighter: #099287;
+  --ifm-color-primary-lightest: #0aa59a;
+  --docusaurus-highlighted-code-line-bg: rgb(8 127 117 / 10%);
+}
+
+html[data-theme='dark'][data-namastack-product='once'],
+[data-theme='dark'] [data-product='once'] {
+  --ns-accent: #5eead4;
+  --ns-accent-hover: #99f6e4;
+  --ns-accent-ink: #062723;
+  --ifm-color-primary: #5eead4;
+  --ifm-color-primary-dark: #3fe5ca;
+  --ifm-color-primary-darker: #30e2c5;
+  --ifm-color-primary-darkest: #1bc6aa;
+  --ifm-color-primary-light: #7defde;
+  --ifm-color-primary-lighter: #8cf1e3;
+  --ifm-color-primary-lightest: #baf8ef;
+  --docusaurus-highlighted-code-line-bg: rgb(94 234 212 / 9%);
 }
 
 html {
@@ -242,13 +273,13 @@ a {
 }
 
 .button--primary {
-  color: #090a0f;
+  color: var(--ns-accent-ink);
   background: var(--ns-accent);
   border-color: var(--ns-accent);
 }
 
 .button--primary:hover {
-  color: #090a0f;
+  color: var(--ns-accent-ink);
   background: var(--ns-accent-hover);
   border-color: var(--ns-accent-hover);
 }
@@ -502,10 +533,10 @@ table th {
   --cc-secondary-color: var(--ns-text-muted);
   --cc-link-color: var(--ns-accent);
   --cc-btn-primary-bg: var(--ns-accent);
-  --cc-btn-primary-color: #090a0f;
+  --cc-btn-primary-color: var(--ns-accent-ink);
   --cc-btn-primary-border-color: var(--ns-accent);
   --cc-btn-primary-hover-bg: var(--ns-accent-hover);
-  --cc-btn-primary-hover-color: #090a0f;
+  --cc-btn-primary-hover-color: var(--ns-accent-ink);
   --cc-btn-primary-hover-border-color: var(--ns-accent-hover);
   --cc-btn-secondary-bg: var(--ns-surface-raised);
   --cc-btn-secondary-color: var(--ns-text-primary);
@@ -600,4 +631,15 @@ table th {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+.docs-product-name {
+  display: block;
+  padding: .75rem .75rem .55rem;
+  color: var(--ns-text-muted);
+  font-family: var(--ns-font-mono);
+  font-size: .65rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: .09em;
 }

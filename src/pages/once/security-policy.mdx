@@ -1,0 +1,25 @@
+---
+title: Security Policy
+description: Supported Namastack Once versions and private vulnerability reporting.
+---
+
+# Security Policy
+
+## Supported Versions
+
+Security maintenance focuses on the current **0.1.x** release line, starting with **0.1.0**.
+Run the latest available patch in that line. Archived documentation and artifacts do not imply
+continued security support for an older release line.
+
+## Reporting a Vulnerability
+
+Do not open a public issue for security vulnerabilities. Use
+[GitHub private vulnerability reporting](https://github.com/namastack/namastack-once/security/advisories/new)
+or contact the maintainer at info@rolandbeisel.de if private reporting is not yet available.
+
+Idempotency keys may be sensitive. Once persists their hash and the operation name, not the raw key
+or payload. Application logs and business tables remain the application's responsibility. A plain
+SHA-256 key digest is not encryption and does not protect predictable key spaces from guessing.
+
+For general release, compatibility and maintenance guidance, see the
+[Namastack support and update policy](/support-and-update-policy/).
