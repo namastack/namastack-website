@@ -110,7 +110,18 @@ The homepage and `/outbox/` embed the Outbox showreel through `ProductVideo` in 
 
 ## Once visual identity and showreel
 
-The Once page uses the golden ring from the Once showreel as a native SVG product mark. The supplied poster, MP4 and converted English captions are under `static/videos/namastack-once-v1.*`. Native video controls, `preload="none"` and versioned asset names match the Outbox video. Update the complete asset set together when replacing the film.
+Once uses teal accents in light and dark mode; Outbox retains the Namastack yellow. Product colors
+are scoped by the route through `src/theme/Layout` and by `data-product` on shared-page sections.
+The Once mark is a native SVG ring, shared visually with the current showreel.
+
+The homepage and Once documentation use the approved v4 film with stationary text holds. Its MP4,
+poster and English captions are under `static/videos/namastack-once-v4.*`. Outbox uses the v11
+video and poster with the v10 English captions. Native video controls, `preload="none"` and
+versioned URLs keep playback accessible and avoid stale caches.
+
+Homepage sections and video players live in `src/components/Products`. Product documentation
+overviews use `src/components/ProductOverview`; the shared sponsorship callout lives in
+`src/components/SponsorSection`. Update the video, poster and captions together when replacing a film.
 
 ## Origin
 

@@ -62,12 +62,12 @@
   line-height: 1.2;
 }
 .primary {
-  color: #10100d;
+  color: var(--ns-accent-ink);
   background: var(--ns-accent);
   border-color: var(--ns-accent);
 }
 .primary:hover {
-  color: #10100d;
+  color: var(--ns-accent-ink);
   background: var(--ns-accent-hover);
   text-decoration: none;
 }

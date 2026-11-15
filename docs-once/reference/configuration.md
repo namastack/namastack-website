@@ -2,7 +2,8 @@
 title: Configuration
 ---
 
-The persistence starter enables Once auto-configuration. The following properties and defaults match the current Spring configuration metadata.
+The persistence starter enables Once auto-configuration. The following properties and defaults match the current Spring
+configuration metadata.
 
 | Property | Default | Meaning |
 |---|---|---|
@@ -16,11 +17,15 @@ The persistence starter enables Once auto-configuration. The following propertie
 | `namastack.once.jdbc.schema-name` | `not set` | Optional existing schema for the default Once instance (database/catalog for MySQL or MariaDB). |
 | `namastack.once.mongodb.collection-name` | `once_marker` | Application-provisioned marker collection for the default MongoDB Once instance. |
 
-`namastack.once.enabled=false` disables the default infrastructure and annotation protection; annotated methods then run without duplicate protection. Treat this as an explicit application behavior change.
+`namastack.once.enabled=false` disables the default infrastructure and annotation protection; annotated methods then run
+without duplicate protection. Treat this as an explicit application behavior change.
 
-The transaction-manager property selects the default instance's manager at construction. For independently configured beans, bind the resource and manager directly as described in [multiple instances](persistence/multiple-instances.md).
+The transaction-manager property selects the default instance's manager at construction. For independently configured
+beans, bind the resource and manager directly as described in [multiple instances](persistence/multiple-instances.md).
 
-JDBC schema-name is optional; MongoDB uses the configured template/database factory. Provision the selected marker store before accepting traffic. See [JDBC](persistence/jdbc.md) and [MongoDB](persistence/mongodb.md) for the required schemas.
+JDBC schema-name is optional; MongoDB uses the configured template/database factory. Provision the selected marker store
+before accepting traffic. See [JDBC](persistence/jdbc.md) and [MongoDB](persistence/mongodb.md) for the required
+schemas.
 
 ## Bean selection and customization
 
@@ -33,9 +38,13 @@ JDBC schema-name is optional; MongoDB uses the configured template/database fact
 | Cleanup task scheduler | `TaskScheduler` bean named `onceCleanupScheduler` replaces the dedicated platform/virtual-thread scheduler. |
 | Instrumentation | Ordered `OnceInstrumentation` beans, composed automatically for default instances. |
 
-JDBC takes precedence over MongoDB when both adapters and a datasource are present. See [multiple instances](persistence/multiple-instances.md) for explicit selection. There is no database-dialect, automatic schema-initialization, or default finite-retention property. Database selection comes from metadata; schema provisioning belongs to the application; retention is selected per request or annotated method.
+JDBC takes precedence over MongoDB when both adapters and a datasource are present. See [multiple
+instances](persistence/multiple-instances.md) for explicit selection. There is no database-dialect, automatic
+schema-initialization, or default finite-retention property. Database selection comes from metadata; schema provisioning
+belongs to the application; retention is selected per request or annotated method.
 
-The cleanup, JDBC and MongoDB property groups reject unknown fields. Check property names carefully rather than assuming an unsupported option is ignored.
+The cleanup, JDBC and MongoDB property groups reject unknown fields. Check property names carefully rather than assuming
+an unsupported option is ignored.
 
 ## Troubleshooting
 
@@ -48,12 +57,13 @@ The cleanup, JDBC and MongoDB property groups reject unknown fields. Check prope
 | Key conversion fails | Use a built-in key type or register an explicit converter producing a non-blank stable string. |
 | Annotation has no effect | Invoke through the injected proxy; avoid self-invocation and final classes/methods. Check that Once is enabled. |
 | Expired request still returns duplicate | Expiry permits cleanup; protection ends only when the marker is actually deleted. |
-| Invalid callback return | Return a non-null `Executed` wrapper, not a caller-created duplicate or an asynchronous result. |
+| Invalid annotated-method return | Result-returning annotated methods must return a non-null `Executed` wrapper. Programmatic callbacks return the business value directly. |
 
 
 ## Modules
 
-The `namastack-once-bom:0.1.0` aligns all Once artifacts. For normal Spring Boot applications, select a persistence starter and optionally observability:
+The `namastack-once-bom:0.1.0` aligns all Once artifacts. For normal Spring Boot applications, select a persistence
+starter and optionally observability:
 
 | Artifact | Role |
 |---|---|
@@ -66,4 +76,5 @@ The `namastack-once-bom:0.1.0` aligns all Once artifacts. For normal Spring Boot
 | `namastack-once-observability-api` | Observation contexts and conventions for customization. |
 | `namastack-once-observability` | Optional Micrometer instrumentation and auto-configuration. |
 
-The persistence starters do not include the optional observability adapter. Add it explicitly when you want Once observations; an exporter and tracing bridge remain application choices.
+The persistence starters do not include the optional observability adapter. Add it explicitly when you want Once
+observations; an exporter and tracing bridge remain application choices.

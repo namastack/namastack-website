@@ -98,7 +98,7 @@ export default function ProductOverview({product}: {product: Product}) {
           property="og:image"
           content={
             product === 'once'
-              ? 'https://www.namastack.io/videos/namastack-once-v1.png'
+              ? 'https://www.namastack.io/videos/namastack-once-v4.png'
               : 'https://www.namastack.io/img/og-image-v3.png'
           }
         />

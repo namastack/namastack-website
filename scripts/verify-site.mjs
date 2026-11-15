@@ -8,7 +8,9 @@ for (const route of ['', 'outbox', 'once', 'docs', 'sponsor', 'contributing', 'l
   assert.ok(existsSync(path.join('build', route, 'index.html')), `Missing page: /${route}/`);
 }
 assert.ok(read('').includes('/once/'), 'Homepage must feature Once');
-assert.ok(read('once').includes('namastack-once-v1.mp4'), 'Once showreel missing');
+assert.ok(read('once').includes('namastack-once-v4.mp4'), 'Once showreel missing');
+assert.ok(read('').includes('namastack-once-v4.mp4'), 'Homepage must use the approved Once showreel');
+assert.ok(read('once').includes('namastack-once-v4.png'), 'Once poster and social preview missing');
 assert.ok(read('docs').includes('/outbox/quickstart/'));
 assert.ok(read('docs').includes('/once/quickstart/'));
 for (const product of metadata.products) {
@@ -52,7 +54,7 @@ assert.ok(once.includes('namastack-once-bom:0.1.0'));
 assert.ok(!once.includes('0.1.0-SNAPSHOT') && !once.includes('Preview documentation'));
 assert.ok(!once.includes('mavenLocal()') && !once.includes('publishToMavenLocal'));
 assert.ok(read('outbox/next/migrations').includes('Migrations'));
-assert.ok(existsSync('build/videos/namastack-once-v1.en.vtt'));
+assert.ok(existsSync('build/videos/namastack-once-v4.en.vtt'));
 const robots = readFileSync('build/robots.txt', 'utf8');
 assert.ok(robots.includes('Disallow: /once/next/'));
 assert.ok(!robots.split('\n').includes('Disallow: /once/'));

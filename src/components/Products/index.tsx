@@ -2,24 +2,13 @@ import React, {useId, useState} from 'react';
 import Link from '@docusaurus/Link';
 import Heading from '@theme/Heading';
 import CodeBlock from '@theme/CodeBlock';
-import {
-  IconArrowRight,
-  IconBrandGithub,
-  IconCheck,
-  IconDatabase,
-  IconFingerprint,
-  IconRefresh,
-  IconActivity,
-  IconShieldCheck,
-  IconCode,
-} from '@tabler/icons-react';
-import {SponsorSection} from '@site/src/components/MarketingPage';
+import {IconArrowRight, IconBrandGithub, IconCheck} from '@tabler/icons-react';
+import SponsorSection from '@site/src/components/SponsorSection';
 import outboxVersions from '@site/outbox_versions.json';
 import onceVersions from '@site/once_versions.json';
 import styles from './styles.module.css';
 
 type Product = 'outbox' | 'once';
-const github = (product: Product) => `https://github.com/namastack/namastack-${product}`;
 
 export function ProductGlyph({product, large = false}: {product: Product; large?: boolean}) {
   const id = useId().replaceAll(':', '');
@@ -32,15 +21,15 @@ export function ProductGlyph({product, large = false}: {product: Product; large?
     >
       <defs>
         <linearGradient id={`${id}-gold`} x1="0" y1="0" x2="1" y2="1">
-          <stop stopColor="#fff1a0" />
-          <stop offset=".23" stopColor="#ffe259" />
-          <stop offset=".55" stopColor="#b19a2f" />
-          <stop offset=".8" stopColor="#e3c343" />
-          <stop offset="1" stopColor="#71601d" />
+          <stop stopColor={product === 'once' ? '#b9fff3' : '#fff1a0'} />
+          <stop offset=".23" stopColor={product === 'once' ? '#5eead4' : '#ffe259'} />
+          <stop offset=".55" stopColor={product === 'once' ? '#148b80' : '#b19a2f'} />
+          <stop offset=".8" stopColor={product === 'once' ? '#39cbb7' : '#e3c343'} />
+          <stop offset="1" stopColor={product === 'once' ? '#085b55' : '#71601d'} />
         </linearGradient>
         <linearGradient id={`${id}-edge`} x1="0" y1="0" x2="0" y2="1">
-          <stop stopColor="#aa8f21" />
-          <stop offset="1" stopColor="#3e3515" />
+          <stop stopColor={product === 'once' ? '#0f9488' : '#aa8f21'} />
+          <stop offset="1" stopColor={product === 'once' ? '#063b38' : '#3e3515'} />
         </linearGradient>
       </defs>
       {product === 'once' ? (
@@ -69,7 +58,7 @@ export function ProductGlyph({product, large = false}: {product: Product; large?
             rx="151"
             ry="109"
             fill="none"
-            stroke="#fff1a0"
+            stroke="#b9fff3"
             strokeOpacity=".38"
             strokeWidth="2"
           />
@@ -79,7 +68,7 @@ export function ProductGlyph({product, large = false}: {product: Product; large?
             rx="133"
             ry="91"
             fill="none"
-            stroke="#392f0c"
+            stroke="#063b38"
             strokeOpacity=".6"
             strokeWidth="3"
           />
@@ -99,11 +88,14 @@ export function ProductGlyph({product, large = false}: {product: Product; large?
   );
 }
 
-export function ProductCards({documentation = false}: {documentation?: boolean}) {
+export function ProductCards({
+  documentation = false,
+  compact = false,
+}: {documentation?: boolean; compact?: boolean}) {
   return (
-    <div className={styles.productGrid}>
+    <div className={`${styles.productGrid} ${compact ? styles.productChooser : ''}`}>
       {(['outbox', 'once'] as Product[]).map((product) => (
-        <article key={product} className={styles.productCard}>
+        <article key={product} className={styles.productCard} data-product={product}>
           <div className={styles.cardTop}>
             <span className={styles.eyebrow}>
               {product === 'outbox' ? 'Transactional outbox' : 'Transactional idempotency'}
@@ -114,8 +106,8 @@ export function ProductCards({documentation = false}: {documentation?: boolean})
           </div>
           <div className={styles.cardHeading}>
             <Heading as="h2">
-              Namastack
-              <br />
+              Namastack{compact ? ' ' : <br />}
+
               {product === 'outbox' ? 'Outbox' : 'Once'}
               <span className={styles.dot}>.</span>
             </Heading>
@@ -126,7 +118,7 @@ export function ProductCards({documentation = false}: {documentation?: boolean})
               ? 'Commit outgoing work with your business data. Deliver it asynchronously, with ordering and retries.'
               : 'Commit your business operation and its marker together. Skip duplicate invocations with the same scope and key.'}
           </p>
-          <ul className={styles.checks}>
+          {!compact && <ul className={styles.checks}>
             {(product === 'outbox'
               ? [
                   'At-least-once delivery',
@@ -144,7 +136,7 @@ export function ProductCards({documentation = false}: {documentation?: boolean})
                 {item}
               </li>
             ))}
-          </ul>
+          </ul>}
           <div className={styles.cardActions}>
             <Link
               className={styles.primary}
@@ -170,10 +162,10 @@ export function ProductCards({documentation = false}: {documentation?: boolean})
 
 export function ProductVideo({product}: {product: Product}) {
   const name = product === 'once' ? 'Once' : 'Outbox';
-  const file = product === 'once' ? 'namastack-once-v1' : 'namastack-outbox-v11';
+  const file = product === 'once' ? 'namastack-once-v4' : 'namastack-outbox-v11';
   const captions = product === 'once' ? `${file}.en.vtt` : 'namastack-outbox-v10.en.vtt';
   return (
-    <figure className={styles.film}>
+    <figure className={styles.film} data-product={product}>
       <figcaption>
         <span className={styles.eyebrow}>Namastack {name}</span>
         <Heading as="h3">
@@ -198,41 +190,86 @@ export function ProductVideo({product}: {product: Product}) {
   );
 }
 
+const outboxSnippet = `@Transactional
+public void place(Order order) {
+    orders.save(order);
+    outbox.schedule(
+        new OrderPlaced(order.id()),
+        order.id().toString()
+    );
+}`;
+
+function ProductSpotlight({product}: {product: Product}) {
+  const isOnce = product === 'once';
+  return (
+    <section
+      className={`${styles.spotlight} ${isOnce ? styles.onceSpotlight : ''}`}
+      data-product={product}
+      aria-labelledby={`${product}-spotlight`}
+    >
+      <div className={styles.container}>
+        <div className={styles.spotlightGrid}>
+          <div className={styles.spotlightCopy}>
+            <div className={styles.spotlightIdentity}>
+              <ProductGlyph product={product} />
+              <span className={styles.eyebrow}>Namastack {isOnce ? 'Once' : 'Outbox'}</span>
+            </div>
+            <Heading as="h2" id={`${product}-spotlight`}>
+              {isOnce ? <>Accept the retry.<br />Skip the duplicate.</> : <>Commit the intent.<br />Deliver after the commit.</>}
+            </Heading>
+            <p>
+              {isOnce
+                ? 'Retries are part of delivery. Give each operation a stable identity, commit its marker with your business writes, and skip work that already succeeded.'
+                : 'Save outgoing work beside your business data in one transaction. Outbox delivers it asynchronously, with per-key ordering and retries when a destination recovers.'}
+            </p>
+            <div className={styles.actions}>
+              <Link className={styles.primary} to={`/${product}/quickstart/`}>
+                Build with {isOnce ? 'Once' : 'Outbox'}
+                <IconArrowRight size={17} aria-hidden="true" />
+              </Link>
+              <Link className={styles.textLink} to={`/${product}/`}>Explore the documentation →</Link>
+            </div>
+            {isOnce ? <OnceCode /> : (
+              <div className={styles.codePanel}>
+                <div className={styles.codeLabel}>One transaction. Business data + outgoing work.</div>
+                <CodeBlock language="java">{outboxSnippet}</CodeBlock>
+              </div>
+            )}
+          </div>
+          <div className={styles.spotlightMedia}>
+            <ProductVideo product={product} />
+            <p className={styles.spotlightNote}>
+              {isOnce
+                ? 'A local transaction protects the business effect. Remote calls stay outside that boundary.'
+                : 'Committed work is delivered at least once. Consumers own their acknowledgement and duplicate handling.'}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ProductHome() {
   return (
     <main className={styles.page}>
       <header className={styles.homeHero}>
         <div className={styles.container}>
-          <div className={styles.homeHeroGrid}>
-            <div className={styles.homeIntro}>
-              <span className={styles.eyebrow}>Open source · Spring Boot</span>
-              <Heading as="h1">
-                Reliable events.
-                <br />
-                <em>Idempotent operations.</em>
-              </Heading>
-              <p>
-                Two focused libraries for dependable applications. Deliver committed work with
-                Outbox. Protect local business operations from duplicates with Once.
-              </p>
-              <div className={styles.actions}>
-                <Link className={styles.primary} to="#projects">
-                  Explore the projects <IconArrowRight size={17} aria-hidden="true" />
-                </Link>
-                <Link className={styles.secondary} to="/once/">
-                  Meet Once
-                </Link>
-              </div>
-            </div>
-            <div className={styles.dualArt} aria-hidden="true">
-              <div data-product-art="outbox">
-                <ProductGlyph product="outbox" large />
-                <span>OUTBOX / DELIVER</span>
-              </div>
-              <div data-product-art="once">
-                <ProductGlyph product="once" large />
-                <span>ONCE / PROTECT</span>
-              </div>
+          <div className={styles.homeIntro}>
+            <span className={styles.eyebrow}>Namastack · Open source · Spring Boot</span>
+            <Heading as="h1">
+              Your business commits.<br />
+              <em>Reliability follows.</em>
+            </Heading>
+            <p>
+              Keep outgoing work with your business data. Protect incoming operations from duplicates.
+              Focused libraries that make your database transaction a reliable foundation.
+            </p>
+            <div className={styles.actions}>
+              <Link className={styles.primary} to="#projects">
+                Find your starting point <IconArrowRight size={17} aria-hidden="true" />
+              </Link>
+              <Link className={styles.secondary} to="#together">See how they work together</Link>
             </div>
           </div>
           <div className={styles.facts}>
@@ -243,61 +280,62 @@ export function ProductHome() {
           </div>
         </div>
       </header>
-      <section className={styles.section}>
+      <section className={styles.chooserSection} aria-labelledby="projects">
         <div className={styles.container}>
-          <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>The Namastack projects</span>
-            <Heading as="h2" id="projects">
-              Two boundaries.
-              <br />A reliable foundation.
-            </Heading>
-            <p>
-              Start with the capability your application needs. Both libraries work independently
-              and fit your existing Spring Boot application.
-            </p>
+          <div className={styles.chooserHeading}>
+            <Heading as="h2" id="projects">Start at the boundary you need.</Heading>
+            <p>Use either library independently. Combine them when work crosses services.</p>
           </div>
-          <ProductCards />
+          <ProductCards compact />
         </div>
       </section>
-      <section className={styles.surface}>
+      <ProductSpotlight product="outbox" />
+      <ProductSpotlight product="once" />
+      <section className={styles.surface} aria-labelledby="together">
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>From producer to consumer</span>
-            <Heading as="h2">Effectively-once business processing.</Heading>
+            <span className={styles.eyebrow}>Better together</span>
+            <Heading as="h2" id="together">Deliver reliably. Commit the effect once.</Heading>
             <p>
-              Outbox delivers committed work at least once. Once commits the consumer’s business
-              changes and marker together. With a stable identity and retained marker, repeated
-              delivery leaves one committed local business effect.
+              Outbox delivers committed work at least once. Once protects the receiving service’s
+              local transaction. Preserve the event identity and retain its marker across retries
+              to keep repeated delivery from repeating a committed business effect.
             </p>
           </div>
           <ol className={styles.flow}>
             {[
-              'Business transaction',
-              'Outbox',
-              'Message broker',
-              'Once',
-              'Business transaction',
-            ].map((step, index) => (
-              <li key={index}>
+              ['Business transaction', 'Save data + outgoing work', undefined],
+              ['Outbox', 'Deliver with ordering + retries', 'outbox'],
+              ['Message broker', 'Carry the stable event identity', undefined],
+              ['Once', 'Reserve + execute + commit', 'once'],
+              ['Business transaction', 'Protect the local business effect', undefined],
+            ].map(([step, detail, product], index) => (
+              <li key={index} data-product={product}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
-                {step}
+                <strong>{step}</strong>
+                <small>{detail}</small>
               </li>
             ))}
           </ol>
           <Link className={styles.textLink} to="/once/reference/usage/integrations/#effectively-once-business-processing">
-            See how Outbox and Once work together →
+            Understand the combined guarantee →
           </Link>
         </div>
       </section>
-      <section className={styles.section}>
+      <section className={styles.section} aria-labelledby="start-building">
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>Meet the projects</span>
-            <Heading as="h2">A closer look.</Heading>
+            <span className={styles.eyebrow}>From an example to your application</span>
+            <Heading as="h2" id="start-building">A familiar Spring Boot starting point.</Heading>
+            <p>
+              Constructor injection, your database, and application-owned migrations.
+              Explore working examples and bring your questions to the community.
+            </p>
           </div>
-          <div className={styles.filmGrid}>
-            <ProductVideo product="outbox" />
-            <ProductVideo product="once" />
+          <div className={styles.resourceLinks}>
+            <Link to="/docs/">Explore the documentation <IconArrowRight size={19} aria-hidden="true" /></Link>
+            <Link href="https://github.com/namastack">Browse the examples on GitHub <IconBrandGithub size={19} aria-hidden="true" /></Link>
+            <Link href="https://github.com/namastack/namastack-outbox/discussions">Join the discussion <IconArrowRight size={19} aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
@@ -313,9 +351,7 @@ public void create(@IdempotencyKey UUID requestId) {
 }`,
   programmatic: `IdempotencyResult<Order> result = once.execute(
     IdempotencyRequest.of("orders.create", requestId),
-    () -> IdempotencyResult.executed(
-        orderService.create(requestId)
-    )
+    () -> orderService.create(requestId)
 );`,
 };
 
@@ -359,144 +395,5 @@ function OnceCode() {
       </div>
       <p>Once owns the transaction. Invoke this boundary outside an existing transaction.</p>
     </div>
-  );
-}
-
-const features = [
-  {
-    icon: IconFingerprint,
-    title: 'A stable identity',
-    text: 'Explicit scopes and keys identify the operation across retries, redelivery and application instances.',
-  },
-  {
-    icon: IconShieldCheck,
-    title: 'One local transaction',
-    text: 'Commit the marker and business writes together. An action failure rolls them back together.',
-  },
-  {
-    icon: IconRefresh,
-    title: 'Duplicates skip work',
-    text: 'A stored marker skips the action. Use an explicit duplicate result when the caller needs to know.',
-  },
-  {
-    icon: IconDatabase,
-    title: 'Your existing database',
-    text: 'Use JDBC or native MongoDB transactions. Provision the marker store through your migration tooling.',
-  },
-  {
-    icon: IconCode,
-    title: 'Two focused APIs',
-    text: 'Protect a Spring bean method with an annotation or call IdempotencyOperations directly.',
-  },
-  {
-    icon: IconActivity,
-    title: 'Operate with confidence',
-    text: 'Configure marker retention and cleanup. Observe execution and cleanup with optional Micrometer instrumentation.',
-  },
-];
-
-export function OnceContent() {
-  return (
-    <main className={styles.page}>
-      <header className={styles.onceHero}>
-        <div className={styles.container}>
-          <div className={styles.onceHeroGrid}>
-            <div>
-              <span className={styles.eyebrow}>Namastack Once · {onceVersions[0]}</span>
-              <Heading as="h1">
-                Once<span className={styles.dot}>.</span>
-              </Heading>
-              <p className={styles.onceTagline}>Transactional idempotency.</p>
-              <p className={styles.lead}>
-                Protect a local business operation with a stable scope and key. Commit its marker
-                with your business data, and skip duplicate invocations.
-              </p>
-              <div className={styles.actions}>
-                <Link className={styles.primary} to="/once/quickstart/">
-                  Get started <IconArrowRight size={17} aria-hidden="true" />
-                </Link>
-                <Link className={styles.secondary} href={github('once')}>
-                  <IconBrandGithub size={18} aria-hidden="true" /> GitHub
-                </Link>
-              </div>
-              <p className={styles.releaseNote}>
-                Java & Kotlin · JDBC & MongoDB · Spring Boot
-                <br />
-                Latest release: 0.1.0.
-              </p>
-            </div>
-            <div className={styles.onceArt}>
-              <ProductGlyph product="once" large />
-              <span>RESERVE / EXECUTE / COMMIT</span>
-            </div>
-          </div>
-        </div>
-      </header>
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <div className={styles.codeLayout}>
-            <div className={styles.sectionHeading}>
-              <span className={styles.eyebrow}>A small boundary. A clear contract.</span>
-              <Heading as="h2">
-                Handle the operation.
-                <br />
-                Let Once handle the duplicate.
-              </Heading>
-              <p>
-                Keep business logic in your application. Once reserves the identity, runs the
-                synchronous action and returns after transaction completion.
-              </p>
-              <Link className={styles.textLink} to="/once/reference/concepts/transactions/">
-                Understand the guarantees →
-              </Link>
-            </div>
-            <OnceCode />
-          </div>
-          <div className={styles.featureGrid}>
-            {features.map(({icon: Icon, title, text}) => (
-              <article key={title}>
-                <Icon size={24} aria-hidden="true" />
-                <Heading as="h3">{title}</Heading>
-                <p>{text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className={styles.surface}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>Watch the overview</span>
-            <Heading as="h2">The transaction is the boundary.</Heading>
-            <p>
-              Remote calls and writes to other database resources sit outside the guarantee. Use
-              Outbox for durable outgoing work inside the local transaction.
-            </p>
-          </div>
-          <ProductVideo product="once" />
-        </div>
-      </section>
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>Start with a working example</span>
-            <Heading as="h2">Put Once into your application.</Heading>
-            <p>
-              Provision the marker schema, choose a stable identity and protect your application
-              boundary. The guide covers the transaction contract from the first example.
-            </p>
-          </div>
-          <div className={styles.actions}>
-            <Link className={styles.primary} to="/once/quickstart/">
-              Read the quickstart <IconArrowRight size={17} aria-hidden="true" />
-            </Link>
-            <Link className={styles.secondary} to="/once/reference/examples/">
-              Explore the examples
-            </Link>
-          </div>
-        </div>
-      </section>
-      <SponsorSection />
-    </main>
   );
 }

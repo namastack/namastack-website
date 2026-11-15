@@ -14,8 +14,7 @@
   letter-spacing: 0.13em;
   color: var(--ns-accent);
 }
-.homeHero,
-.onceHero {
+.homeHero {
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--ns-border-subtle);
@@ -28,12 +27,6 @@
 .homeHero {
   padding: 6rem 0 0;
 }
-.homeHeroGrid {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 2rem;
-  align-items: center;
-}
 .homeIntro h1 {
   margin: 1.25rem 0 1.4rem;
   font-size: clamp(2.8rem, 4.7vw, 4.5rem);
@@ -45,8 +38,7 @@
   font-style: normal;
   color: var(--ns-accent);
 }
-.homeIntro p,
-.lead {
+.homeIntro p {
   max-width: 580px;
   color: var(--ns-text-muted);
   font-size: 1.02rem;
@@ -75,11 +67,11 @@
 }
 .primary {
   background: var(--ns-accent);
-  color: #10100d;
+  color: var(--ns-accent-ink);
 }
 .primary:hover {
   background: var(--ns-accent-hover);
-  color: #10100d;
+  color: var(--ns-accent-ink);
   text-decoration: none;
 }
 .secondary {
@@ -98,35 +90,6 @@
   font-size: 0.83rem;
   font-weight: 600;
 }
-.dualArt {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-  position: relative;
-  align-items: center;
-}
-
-.dualArt > div {
-  position: relative;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  text-align: center;
-  padding: 1rem 0.2rem 1.5rem;
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in srgb, var(--ns-accent) 5%, transparent),
-    transparent 75%
-  );
-}
-.dualArt span,
-.onceArt > span {
-  display: block;
-  text-align: center;
-  color: var(--ns-text-muted);
-  font-family: var(--ns-font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.16em;
-}
 .largeGlyph {
   display: block;
   width: 100%;
@@ -134,7 +97,6 @@
   filter: drop-shadow(0 16px 24px rgb(0 0 0 / 20%));
   color: var(--ns-accent);
 }
-
 .facts {
   display: flex;
   justify-content: space-between;
@@ -292,11 +254,6 @@
   color: var(--ns-accent);
   z-index: 1;
 }
-.filmGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
 .film {
   margin: 0;
 }
@@ -314,66 +271,6 @@
   border: 1px solid var(--ns-border-active);
   border-radius: 8px;
   background: #080a0b;
-}
-.onceHero {
-  padding: 5rem 0;
-}
-.onceHeroGrid {
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  align-items: center;
-  gap: 3rem;
-}
-.onceHero h1 {
-  font-size: clamp(5rem, 9.5vw, 8rem);
-  font-weight: 600;
-  line-height: 1;
-  margin: 1.2rem 0 1rem;
-  letter-spacing: -0.075em;
-}
-.onceTagline {
-  color: var(--ns-text-primary);
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  letter-spacing: -0.035em;
-  margin-bottom: 1.2rem;
-}
-.onceArt {
-  position: relative;
-  background: radial-gradient(
-    ellipse at center,
-    color-mix(in srgb, var(--ns-accent) 9%, transparent),
-    transparent 65%
-  );
-  padding-bottom: 1.5rem;
-}
-.onceArt::after {
-  content: '';
-  position: absolute;
-  inset: 5%;
-  border: 1px solid var(--ns-border-subtle);
-  border-radius: 50%;
-  transform: rotate(30deg);
-  pointer-events: none;
-}
-.onceArt .largeGlyph {
-  width: 100%;
-  max-width: 510px;
-  margin-inline: auto;
-}
-.releaseNote {
-  margin: 1.5rem 0 0;
-  color: var(--ns-text-muted);
-  font-size: 0.71rem;
-  line-height: 1.9;
-}
-.codeLayout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-}
-.codeLayout .sectionHeading {
-  margin: 0;
 }
 .codePanel {
   border: 1px solid var(--ns-border-active);
@@ -416,30 +313,6 @@
   padding: 1rem;
   border-top: 1px solid var(--ns-border-subtle);
 }
-.featureGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.6rem;
-  margin-top: 4rem;
-}
-.featureGrid article {
-  padding-top: 1.3rem;
-  border-top: 1px solid var(--ns-border-active);
-}
-.featureGrid svg {
-  color: var(--ns-accent);
-}
-.featureGrid h3 {
-  font-size: 1rem;
-  letter-spacing: -0.02em;
-  margin: 1rem 0 0.7rem;
-}
-.featureGrid p {
-  font-size: 0.82rem;
-  line-height: 1.8;
-  color: var(--ns-text-muted);
-  margin: 0;
-}
 .primary:focus-visible,
 .secondary:focus-visible,
 .codeTabs button:focus-visible,
@@ -448,34 +321,14 @@
   outline-offset: 4px;
 }
 @media (max-width: 996px) {
-  .homeHeroGrid {
-    grid-template-columns: 1fr;
-  }
   .homeIntro {
     max-width: 740px;
   }
   .homeIntro h1 {
     font-size: clamp(2.8rem, 6vw, 4.5rem);
   }
-  .dualArt {
-    max-width: 500px;
-    margin: 0 auto;
-  }
-  .dualArt .largeGlyph {
-    max-height: 210px;
-  }
   .facts {
     margin-top: 2rem;
-  }
-  .onceHeroGrid {
-    gap: 1rem;
-  }
-  .onceHero h1 {
-    font-size: 6rem;
-  }
-  .codeLayout {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   .cardHeading .glyph {
     width: 95px;
@@ -499,18 +352,9 @@
   .homeIntro h1 {
     font-size: 2.8rem;
   }
-  .homeIntro p,
-  .lead {
+  .homeIntro p {
     font-size: 0.93rem;
   }
-  .dualArt {
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  .dualArt .largeGlyph {
-    max-height: 160px;
-  }
-
   .facts {
     font-size: 0.58rem;
     display: grid;
@@ -521,9 +365,7 @@
   .surface {
     padding: 3rem 0;
   }
-  .productGrid,
-  .filmGrid,
-  .onceHeroGrid {
+  .productGrid {
     grid-template-columns: 1fr;
   }
   .cardTop {
@@ -535,22 +377,6 @@
   }
   .cardHeading .glyph {
     width: 115px;
-  }
-  .onceHero {
-    padding: 3rem 0;
-  }
-  .onceHero h1 {
-    font-size: 5.8rem;
-  }
-  .onceArt {
-    max-width: 350px;
-    width: 100%;
-    margin: 1rem auto 0;
-  }
-  .featureGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.3rem;
-    margin-top: 2.5rem;
   }
   .flow {
     grid-template-columns: 1fr;
@@ -569,12 +395,214 @@
     right: 1.4rem;
     bottom: -0.65rem;
   }
-  .filmGrid {
-    gap: 2rem;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .page * {
     scroll-behavior: auto;
+  }
+}
+.homeHero {
+  padding-top: 6.5rem;
+  background:
+    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--ns-accent) 8%, transparent), transparent 65%),
+    var(--ns-surface-base);
+}
+.homeIntro {
+  max-width: 900px;
+  margin-inline: auto;
+  text-align: center;
+}
+.homeIntro h1 {
+  font-size: clamp(2.75rem, 5.6vw, 5rem);
+  line-height: 1.08;
+}
+.homeIntro p {
+  max-width: 630px;
+  margin-inline: auto;
+}
+.homeIntro .actions {
+  justify-content: center;
+}
+.chooserSection {
+  padding: 3.5rem 0 4.5rem;
+}
+.chooserHeading {
+  margin-bottom: 1.5rem;
+}
+.chooserHeading h2 {
+  font-size: 1.35rem;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.03em;
+}
+.chooserHeading p {
+  color: var(--ns-text-muted);
+  font-size: 0.9rem;
+}
+.productChooser .productCard {
+  padding: 1.5rem;
+  border-color: var(--ns-border-subtle);
+  border-top: 2px solid var(--ns-accent);
+}
+.productChooser .cardHeading {
+  padding: 0.85rem 0;
+}
+.productChooser .cardHeading h2 {
+  font-size: 1.5rem;
+}
+.productChooser .cardHeading .glyph {
+  width: 75px;
+  height: 64px;
+}
+.productChooser .productCard > p {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
+}
+.productChooser .primary {
+  background: transparent;
+  padding: 0;
+  min-height: 32px;
+  color: var(--ns-accent);
+}
+.productChooser .primary:hover {
+  color: var(--ns-accent-hover);
+}
+.productChooser .cardActions {
+  border-top: 0;
+  padding-top: 0.6rem;
+}
+.spotlight {
+  padding: 5rem 0;
+  border-top: 1px solid var(--ns-border-subtle);
+  background: var(--ns-surface-raised);
+}
+.onceSpotlight {
+  background:
+    radial-gradient(ellipse at 10% 45%, color-mix(in srgb, var(--ns-accent) 5%, transparent), transparent 55%),
+    var(--ns-surface-base);
+}
+.spotlightGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 4rem;
+  align-items: center;
+}
+.spotlightCopy {
+  min-width: 0;
+}
+.spotlightIdentity {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-bottom: 1.3rem;
+}
+.spotlightIdentity .glyph {
+  width: 48px;
+  height: 45px;
+}
+.spotlightCopy > h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  letter-spacing: -0.045em;
+  line-height: 1.13;
+  margin: 0 0 1.3rem;
+  font-weight: 600;
+}
+.spotlightCopy > p {
+  color: var(--ns-text-muted);
+  line-height: 1.85;
+  font-size: 0.93rem;
+}
+.spotlightCopy .actions {
+  margin-top: 1.4rem;
+  margin-bottom: 2rem;
+}
+.spotlightCopy .codePanel {
+  margin-top: 1rem;
+}
+.codeLabel {
+  padding: 1rem;
+  border-bottom: 1px solid var(--ns-border-subtle);
+  color: var(--ns-text-muted);
+  font-family: var(--ns-font-mono);
+  font-size: 0.65rem;
+}
+.spotlightMedia {
+  min-width: 0;
+}
+.onceSpotlight .spotlightMedia {
+  grid-column: 1;
+  grid-row: 1;
+}
+.onceSpotlight .spotlightCopy {
+  grid-column: 2;
+}
+.spotlightNote {
+  font-size: 0.77rem;
+  line-height: 1.8;
+  color: var(--ns-text-muted);
+  margin: 1.5rem 0 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--ns-accent);
+}
+.flow li[data-product] {
+  border-top: 2px solid var(--ns-accent);
+}
+.flow small {
+  font-size: 0.7rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--ns-text-muted);
+}
+.resourceLinks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.resourceLinks a {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--ns-border-active);
+  color: var(--ns-text-primary);
+  font-size: 0.87rem;
+}
+.resourceLinks a svg {
+  color: var(--ns-accent);
+  flex-shrink: 0;
+}
+.resourceLinks a:hover {
+  color: var(--ns-accent);
+  text-decoration: none;
+}
+@media (max-width: 996px) {
+  .spotlightGrid {
+    gap: 2rem;
+  }
+}
+@media (max-width: 760px) {
+  .homeHero {
+    padding-top: 3.5rem;
+  }
+  .homeIntro h1 {
+    font-size: clamp(2.4rem, 7.5vw, 3.8rem);
+  }
+  .chooserSection,
+  .spotlight {
+    padding: 3rem 0;
+  }
+  .spotlightGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+  .onceSpotlight .spotlightCopy,
+  .onceSpotlight .spotlightMedia {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .resourceLinks {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 }

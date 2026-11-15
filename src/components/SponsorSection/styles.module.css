@@ -1,28 +1,113 @@
-.wrapper {
-  background: var(--ifm-background-surface-color);
-  border-top: 1px solid var(--ifm-color-emphasis-200);
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 1.65rem;
 }
 
-.inner {
+.primaryButton,
+.ghostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: var(--ns-font-body);
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease;
+}
+
+.primaryButton {
+  color: var(--ns-accent-ink);
+  background: var(--ns-accent);
+  border-color: var(--ns-accent);
+}
+
+.primaryButton:hover {
+  color: var(--ns-accent-ink);
+  background: var(--ns-accent-hover);
+  border-color: var(--ns-accent-hover);
+  text-decoration: none;
+}
+
+.ghostButton:hover {
+  color: var(--ns-accent);
+  background: var(--ns-surface-overlay);
+  border-color: var(--ns-border-active);
+  text-decoration: none;
+}
+
+.ghostButton {
+  color: var(--ns-text-muted);
+  background: transparent;
+  border-color: transparent;
+}
+
+.ghostButton svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.sponsorCard h2 {
+  margin: 0;
+  color: var(--ns-text-primary);
+  font-size: clamp(1.8rem, 4vw, 2.65rem);
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.sponsorCard > svg {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 1rem;
+  padding: 0.4rem;
+  color: var(--ns-accent);
+  background: var(--ns-surface-overlay);
+  border: 1px solid var(--ns-border-subtle);
+  border-radius: 6px;
+}
+
+.sponsorSection {
+  padding: 4.5rem 1.5rem;
+  background: var(--ns-surface-base);
+}
+
+.sponsorCard {
   max-width: 720px;
-  margin: 0 auto;
+  margin-inline: auto;
+  padding: 2.25rem;
+  background: var(--ns-surface-raised);
+  border: 1px solid var(--ns-border-subtle);
+  border-radius: 10px;
   text-align: center;
 }
 
-.icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+.sponsorCard > svg {
+  color: #f38ba8;
 }
 
-.subtitle {
-  font-size: 1.1rem;
-  color: var(--ifm-color-emphasis-700);
-  margin-bottom: 2rem;
+.sponsorCard h2 {
+  font-size: 1.55rem;
 }
 
-.actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
+.sponsorCard p {
+  max-width: 590px;
+  margin: 0.8rem auto 0;
+  color: var(--ns-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .ghostButton {
+    transition: none;
+  }
 }
