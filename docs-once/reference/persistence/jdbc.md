@@ -16,12 +16,12 @@ management supplies compatible driver versions.
 
 | Database | JDBC driver dependency | Schema script |
 |---|---|---|
-| PostgreSQL | `org.postgresql:postgresql` | [postgresql.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/postgresql.sql) |
-| MySQL | `com.mysql:mysql-connector-j` | [mysql.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/mysql.sql) |
-| MariaDB | `org.mariadb.jdbc:mariadb-java-client` | [mariadb.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/mariadb.sql) |
-| Microsoft SQL Server (MSSQL) | `com.microsoft.sqlserver:mssql-jdbc` | [sqlserver.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/sqlserver.sql) |
-| Oracle | `com.oracle.database.jdbc:ojdbc11` | [oracle.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/oracle.sql) |
-| H2 | `com.h2database:h2` | [h2.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/h2.sql) |
+| PostgreSQL | `org.postgresql:postgresql` | [once-tables.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/postgres/once-tables.sql) |
+| MySQL | `com.mysql:mysql-connector-j` | [once-tables.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/mysql/once-tables.sql) |
+| MariaDB | `org.mariadb.jdbc:mariadb-java-client` | [once-tables.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/mariadb/once-tables.sql) |
+| Microsoft SQL Server (MSSQL) | `com.microsoft.sqlserver:mssql-jdbc` | [once-tables.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/sqlserver/once-tables.sql) |
+| Oracle | `com.oracle.database.jdbc:ojdbc11` | [once-tables.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/oracle/once-tables.sql) |
+| H2 | `com.h2database:h2` | [once-tables.sql](https://github.com/namastack/namastack-once/blob/main/namastack-once-jdbc/src/main/resources/schema/h2/once-tables.sql) |
 
 For example, select SQL Server by adding its driver and configuring a SQL Server datasource:
 
@@ -71,31 +71,55 @@ Once detects the SQL dialect from JDBC database metadata on first repository use
 set. Unsupported database products fail rather than falling back to a generic dialect. SQL Server and Oracle have
 dedicated reservation/cleanup integration tests in the Once repository, alongside the other JDBC adapters.
 
-## Schema scripts
+## Automatic schema initialization
 
-Once never creates or changes tables. Apply the matching script above through your application's migration process
-before processing work. Do not reuse the PostgreSQL DDL unchanged for another database:
+The JDBC starter creates `once_marker` and its expiry index automatically at startup for all supported
+databases. Existing tables are preserved; initialization does not migrate them.
+
+Automatic schema initialization and the `table-prefix` setting are part of
+the upcoming Once release. For released behavior, select the `0.1.x` documentation in the version menu.
+
+Set `namastack.once.jdbc.schema-initialization.enabled=false` when managing the schema with Flyway,
+Liquibase, or your own SQL scripts. Use the database-specific scripts linked above as the starting point.
+Do not reuse the PostgreSQL DDL unchanged for another database:
 
 - PostgreSQL and H2 use `TIMESTAMP(6)`.
 - MySQL and MariaDB use `DATETIME(6)` and require InnoDB tables.
 - SQL Server uses `DATETIME2(6)` and `NVARCHAR(200)` for the scope.
 - Oracle uses `TIMESTAMP(6)` and `VARCHAR2(200 CHAR)` for the scope.
 
-The identity column is a `CHAR(64)` primary key. Preserve the non-unique expiry index from the database's own script.
-JDBC timestamps contain UTC fields at microsecond precision; changing the timestamp type or precision can change
-retention behavior.
+The identity column is a `CHAR(64)` primary key. Keep it as the marker table's only unique constraint
+so unrelated uniqueness conflicts cannot be mistaken for duplicate identities. Preserve the non-unique
+expiry index and timestamp precision from the database's own script. JDBC timestamps contain UTC fields
+at microsecond precision; changing their type or precision can change retention behavior.
 
-The default table is `once_marker`. Configure `namastack.once.jdbc.table-name` and optionally `schema-name` for an
-application-provisioned table. On MySQL and MariaDB, the schema setting selects a database/catalog; use InnoDB for
-marker and business tables.
+## Custom schema and table names
 
-Table and schema names are trusted SQL fragments, used as configured without automatic quoting. Supply any
-database-specific quoting yourself and keep these names in application configuration, never in request data.
+Configure `schema-name`, `table-prefix`, and `table-name` to change the marker table reference.
+Automatic initialization supports only the default naming, matching Namastack Outbox. Disable it and
+create the schema, table, and index yourself when using custom names:
 
-Keep the identity primary key as the marker table's only unique constraint so unrelated uniqueness conflicts cannot be
-mistaken for duplicate identities. Preserve the supplied timestamp precision and non-unique cleanup index. Schema
-ownership remains with the application; initialization in the examples is explicitly enabled by those examples, not
-performed by Once.
+```yaml
+namastack:
+  once:
+    jdbc:
+      schema-initialization:
+        enabled: false
+      schema-name: app
+      table-prefix: app_
+      table-name: idempotency_marker
+```
+
+This configuration uses `app.app_idempotency_marker`. On MySQL and MariaDB, the schema setting selects
+a database/catalog; use InnoDB for marker and business tables.
+
+Schema and table names are trusted SQL fragments, used as configured without automatic quoting.
+Supply any database-specific quoting yourself and keep these names in application configuration,
+never in request data. Explicit Once instances and custom repositories should disable initialization
+and manage their own schemas.
+
+The [custom schema example](https://github.com/namastack/namastack-once/tree/main/namastack-once-examples/namastack-once-example-custom-schema)
+shows both APIs using a custom schema and marker table with application-managed SQL.
 
 The reservation path inserts a marker; an identity collision skips the action and the owned transaction is rolled back.
 The action's writes commit together with a successful new marker. Cleanup uses separately committed, bounded batches.

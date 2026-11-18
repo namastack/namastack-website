@@ -58,14 +58,15 @@ dependencies {
 
 For a complete runnable application, see [Examples](reference/examples.md).
 
-## 2. Apply the database schema
+## 2. Prepare the database
 
-Once **never creates or migrates tables**. Apply the schema matching your database before accepting traffic.
+The JDBC starter creates its default marker table and expiry index automatically at startup.
+Existing tables are preserved; Once does not migrate them.
 
-**Schema Files for Flyway/Liquibase:**
-
-You can find the SQL schema files here: 👉 [Schema Files on
-GitHub](https://github.com/namastack/namastack-once/tree/main/namastack-once-jdbc/src/main/resources/schema)
+For Flyway, Liquibase, or custom schema and table names, set
+`namastack.once.jdbc.schema-initialization.enabled=false` and provision the marker schema yourself.
+Use the [database-specific schema files on
+GitHub](https://github.com/namastack/namastack-once/tree/main/namastack-once-jdbc/src/main/resources/schema).
 
 For the application code below, also provision an `orders` table with a string primary key `id` and a non-null string
 `customer` column in the same database. Configure the datasource through Spring Boot's `spring.datasource.url`,
