@@ -183,6 +183,7 @@ The following options control how records are processed:
 |----------------------------------------------------------|---------|-----------------------------------------------------------------|
 | `namastack.outbox.processing.stop-on-first-failure`      | `true`  | Stop processing on first failure                                |
 | `namastack.outbox.processing.delete-completed-records`   | `false` | Delete records after completion                                 |
+| `namastack.outbox.processing.dispatch-mode`              | `batch` | `batch` or `continuous`; see [Dispatch Modes](polling.md#dispatch-modes) (since 2.0.0) |
 | `namastack.outbox.processing.executor-core-pool-size`    | `4`     | Core threads for processing (platform threads)                  |
 | `namastack.outbox.processing.executor-max-pool-size`     | `8`     | Maximum threads for processing (platform threads)               |
 | `namastack.outbox.processing.executor-concurrency-limit` | `-1`    | Concurrency limit for virtual threads (`-1` unlimited)          |
