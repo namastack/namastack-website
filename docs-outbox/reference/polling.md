@@ -157,9 +157,9 @@ The dispatch mode controls how a poll cycle selects record keys and submits them
 processing executor. Both modes keep records of one key in order, process a key on at most one
 thread of an instance at a time, and apply `processing.stop-on-first-failure` in the same way.
 
-| Property                                    | Default | Description                                     |
-|---------------------------------------------|---------|-------------------------------------------------|
-| `namastack.outbox.processing.dispatch-mode` | `batch` | How record keys are dispatched: `batch` or `continuous` |
+| Property                                 | Default | Description                                             |
+|------------------------------------------|---------|---------------------------------------------------------|
+| `namastack.outbox.polling.dispatch-mode` | `batch` | How record keys are dispatched: `batch` or `continuous` |
 
 ### Batch Dispatch
 
@@ -177,7 +177,7 @@ of the cycle are still processed:
 ```yaml
 namastack:
   outbox:
-    processing:
+    polling:
       dispatch-mode: continuous
 ```
 

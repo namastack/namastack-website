@@ -19,6 +19,7 @@ namastack:
     # Polling Configuration
     polling:
       trigger: fixed                           # Polling strategy: fixed|adaptive (default: fixed)
+      dispatch-mode: batch                     # Key dispatch: batch|continuous (default: batch) (since 2.0.0)
       batch-size: 10                           # Record keys per poll cycle (default: 10)
       fixed:
         interval: 2s                           # interval between polling cycles (default: 2s)
@@ -34,7 +35,6 @@ namastack:
     processing:
       stop-on-first-failure: true              # Stop processing on first failure (default: true)
       delete-completed-records: false          # Delete records after completion (default: false)
-      dispatch-mode: batch                     # Key dispatch: batch|continuous (default: batch) (since 2.0.0)
       executor-core-pool-size: 4               # Core threads for processing (default: 4, platform threads)
       executor-max-pool-size: 8                # Maximum threads for processing (default: 8, platform threads)
       executor-concurrency-limit: -1           # Concurrency limit for virtual threads (default: -1 unlimited)
