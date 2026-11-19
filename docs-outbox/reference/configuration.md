@@ -19,6 +19,7 @@ namastack:
     # Polling Configuration
     polling:
       trigger: fixed                           # Polling strategy: fixed|adaptive (default: fixed)
+      dispatch-mode: batch                     # Key dispatch: batch|continuous (default: batch) (since 2.0.0)
       batch-size: 10                           # Record keys per poll cycle (default: 10)
       fixed:
         interval: 2s                           # interval between polling cycles (default: 2s)

@@ -252,12 +252,17 @@ Do not keep scaling instances if heartbeat re-registration warnings appear durin
 `batch-size` is the number of record keys loaded per polling cycle. It is not the number of records,
 because multiple records can share the same key and must be processed in order.
 
-The scheduler loads up to `batch-size` keys, submits one task per key, and waits for all submitted
-key tasks before the cycle completes. That makes the setting sensitive:
+In the default `batch` dispatch mode, the scheduler loads up to `batch-size` keys, submits one task
+per key, and waits for all submitted key tasks before the cycle completes. That makes the setting
+sensitive:
 
 - Too small can increase cycle overhead and reduce effective throughput.
 - Too aggressive polling can add scheduler and query churn.
 - Too large can create long cycles if the executor or database cannot keep up.
+
+In `continuous` [dispatch mode](polling.md#dispatch-modes), `batch-size` is the number of keys in
+flight, and free slots are refilled while slow keys are still running. The measurements on this
+page use `batch` dispatch; measure `continuous` dispatch against your own workload before adopting it.
 
 In the latest pass, two platform-thread settings reached 10000 records/s:
 
