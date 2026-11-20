@@ -251,14 +251,24 @@
       "permanent": true
     },
     {
-      "source": "/docs/1.11.x/:path(.*)",
+      "source": "/docs/2.0.x/:path(.*)",
       "destination": "/outbox/:path",
       "permanent": false
     },
     {
-      "source": "/docs/1.11.x/:path*",
+      "source": "/docs/2.0.x/:path*",
       "destination": "/outbox/:path*",
       "permanent": false
+    },
+    {
+      "source": "/docs/1.11.x/:path(.*)",
+      "destination": "/outbox/1.11.x/:path",
+      "permanent": true
+    },
+    {
+      "source": "/docs/1.11.x/:path*",
+      "destination": "/outbox/1.11.x/:path*",
+      "permanent": true
     },
     {
       "source": "/docs/1.10.x/:path(.*)",
@@ -731,22 +741,22 @@
       "permanent": false
     },
     {
-      "source": "/docs/outbox/1.11.x/:path(.*)",
+      "source": "/docs/outbox/2.0.x/:path(.*)",
       "destination": "/outbox/:path",
       "permanent": false
     },
     {
-      "source": "/docs/outbox/1.11.x/:path*",
+      "source": "/docs/outbox/2.0.x/:path*",
       "destination": "/outbox/:path*",
       "permanent": false
     },
     {
-      "source": "/outbox/1.11.x/:path(.*)",
+      "source": "/outbox/2.0.x/:path(.*)",
       "destination": "/outbox/:path",
       "permanent": false
     },
     {
-      "source": "/outbox/1.11.x/:path*",
+      "source": "/outbox/2.0.x/:path*",
       "destination": "/outbox/:path*",
       "permanent": false
     },
