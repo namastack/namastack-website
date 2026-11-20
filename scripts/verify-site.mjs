@@ -34,6 +34,7 @@ assert.ok(
 );
 assert.ok(!onceNav.includes('/outbox/1.10.x/'), 'Outbox versions leaked into Once dropdown');
 assert.ok(outboxNav.includes('/outbox/1.10.x/'), 'Outbox archive version missing');
+assert.ok(outboxNav.includes(metadata.outboxVersions[0]), 'Latest Outbox line missing from dropdown');
 assert.ok(!outboxNav.includes('/once/next/'), 'Once version leaked into Outbox dropdown');
 assert.ok(
   !navbar(read('')).includes(metadata.onceVersions[0]),
@@ -50,8 +51,8 @@ for (const [source, target] of [
   assert.ok(read(source).includes(`url=${target}`), `Static fallback missing for ${source}`);
 }
 const once = read('once/quickstart');
-assert.ok(once.includes('namastack-once-bom:0.1.0'));
-assert.ok(!once.includes('0.1.0-SNAPSHOT') && !once.includes('Preview documentation'));
+assert.match(once, /namastack-once-bom:\d+\.\d+\.\d+/);
+assert.ok(!once.includes('-SNAPSHOT') && !once.includes('Preview documentation'));
 assert.ok(!once.includes('mavenLocal()') && !once.includes('publishToMavenLocal'));
 assert.ok(read('outbox/next/migrations').includes('Migrations'));
 assert.ok(existsSync('build/videos/namastack-once-v4.en.vtt'));
@@ -112,6 +113,14 @@ for (const product of metadata.products) {
 assert.ok(!navbar(read('')).includes('>Products<'));
 assert.ok(!navbar(read('')).includes('>Docs<'));
 for (const prefix of ['', ...metadata.outboxVersions.slice(1).map((version) => `${version}/`)]) {
+  const version = prefix ? prefix.split('/')[0] : metadata.outboxVersions[0];
+  if (Number.parseInt(version, 10) >= 2) {
+    assert.ok(
+      read(`outbox/${prefix}`).includes(`/outbox/${prefix}migrations/2-0-0/`),
+      `Outbox ${version} must link to its own migration guide`,
+    );
+    continue;
+  }
   assert.ok(
     !read(`outbox/${prefix}`).includes('/outbox/next/migrations/2-0-0/'),
     `Upcoming migration guide leaked into Outbox ${prefix || 'stable'} overview or sidebar`,

@@ -47,7 +47,34 @@ Each product is a separate Docusaurus docs instance, with plugin IDs `outbox` an
 
 Correct a published snapshot in its product's versioned directory and update development docs where appropriate. Deploying the site never creates a documentation snapshot.
 
-Create an independent new release-line snapshot with one of these commands:
+### Documentation release process
+
+After publishing the first stable library release in a new major or minor line, run
+**Prepare Docs Release** in this repository's GitHub Actions. Select `outbox` or
+`once` and enter the documentation line, for example `2.0.x` for Outbox `2.0.0`.
+The workflow snapshots that product's development docs and sidebar from `main`,
+synchronizes redirects, runs all website checks, and opens a release pull request.
+It also starts Website validation explicitly because pushes made with
+`GITHUB_TOKEN` do not trigger pull request workflows.
+
+Before running it, make sure the development docs describe the released library.
+Before merging the PR, check dependency examples against the published artifact
+version, migration guidance, and the shared security policy. Merge the PR to
+publish through the existing Website production workflow. The workflow needs the
+repository setting **Allow GitHub Actions to create and approve pull requests**.
+It uses `GITHUB_TOKEN`; no cross-repository credentials are required.
+
+Patch releases share their existing documentation line: update that product's
+published snapshot and development docs as appropriate through a normal PR.
+Prereleases stay in Next. A new snapshot must be a newer line; existing lines
+are never overwritten by the release workflow.
+
+For example: publish Outbox `2.0.0`, prepare Outbox docs `2.0.x`, review and merge
+the docs PR, then verify `/outbox/`, its quickstart and migration guide, the
+version selector, archived `1.11.x` docs and legacy redirects. Once is versioned
+and released independently by the same process.
+
+You can also create a new release-line snapshot locally:
 
 ```sh
 npm run docs:version:outbox -- 2.0.x

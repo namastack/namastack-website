@@ -1,0 +1,91 @@
+name: Prepare Docs Release
+run-name: Prepare ${{ inputs.product }} docs ${{ inputs.line }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      product:
+        description: Product to version
+        required: true
+        type: choice
+        options: [outbox, once]
+      line:
+        description: New documentation release line (for example 2.0.x)
+        required: true
+        type: string
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: prepare-docs-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DOCS_PRODUCT: ${{ inputs.product }}
+      DOCS_LINE: ${{ inputs.line }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate new release line
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          const {DOCS_PRODUCT: product, DOCS_LINE: line} = process.env;
+          assert.ok(['outbox', 'once'].includes(product), 'Unknown product');
+          assert.match(line, /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.x$/, 'Expected a release line such as 2.0.x');
+          const versions = JSON.parse(readFileSync(`${product}_versions.json`, 'utf8'));
+          assert.ok(!versions.includes(line), 'This line already exists; edit its published snapshot for patch releases');
+          if (versions.length) {
+            const [major, minor] = line.split('.').slice(0, 2).map(BigInt);
+            const [latestMajor, latestMinor] = versions[0].split('.').slice(0, 2).map(BigInt);
+            assert.ok(major > latestMajor || (major === latestMajor && minor > latestMinor), 'A new snapshot must be newer than the latest line');
+          }
+          JS
+      - name: Snapshot documentation and synchronize redirects
+        run: npm run "docs:version:$DOCS_PRODUCT" -- "$DOCS_LINE"
+      - name: Validate documentation release
+        run: |
+          npm run typecheck
+          npm test
+          npm run build
+          npm run verify:site
+          git diff --check
+      - name: Open documentation release pull request
+        run: |
+          branch="docs-release/$DOCS_PRODUCT/$DOCS_LINE"
+          git switch --create "$branch"
+          git config user.name "Namastack Release Automation"
+          git config user.email "info@rolandbeisel.de"
+          git add "${DOCS_PRODUCT}_versions.json" "${DOCS_PRODUCT}_versioned_docs" "${DOCS_PRODUCT}_versioned_sidebars" vercel.json
+          git commit -m "Release $DOCS_PRODUCT documentation $DOCS_LINE"
+          git push --set-upstream origin "$branch"
+          body_file="$RUNNER_TEMP/docs-release-pr.md"
+          cat > "$body_file" <<EOF
+          Publishes the $DOCS_LINE documentation line for Namastack $DOCS_PRODUCT.
+
+          Snapshots the development docs and sidebar, updates the version selector and synchronizes redirects. Older snapshots remain available. The existing Website workflow deploys production after merge to main.
+
+          Before merging, confirm that the corresponding stable library release is published, dependency examples use its artifact version, migration guidance is complete, and the shared security policy reflects the library's supported lines.
+
+          Validation: typecheck, tests, production build, generated-site verification and git diff checks passed.
+          EOF
+          gh pr create --base main --head "$branch" \
+            --title "Release $DOCS_PRODUCT documentation $DOCS_LINE" \
+            --body-file "$body_file"
+          # GITHUB_TOKEN pushes do not trigger push/pull_request workflows.
+          gh workflow run website.yml --ref "$branch"
